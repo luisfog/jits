@@ -187,8 +187,8 @@
 				return;
 			}
 		}else if(strcmp($_POST['order'], "deleteInit") == 0){
-			unlink('../js/init.js');
-			unlink('./init.php');
+			//unlink('../js/init.js');
+			//unlink('./init.php');
 		}
 
 		$conn->close();
