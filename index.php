@@ -242,6 +242,7 @@
 		
 		$i = 0;
 		foreach ($clientsKeys as &$clientKey) {
+			
 			$sql = "SELECT * FROM client_$clientKey ORDER BY creation DESC LIMIT 1";
 			$result = $conn->query($sql);
 			

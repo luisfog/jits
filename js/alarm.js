@@ -3,6 +3,27 @@ window.onload = function() {
 	updateAlarmsList();
 };
 
+function deleteAlarmConfirmation(ele){
+	document.getElementById("modalYesButton").onclick = function() { deleteAlarm(ele.id); };
+	document.getElementById("modalDelete").style.display = "block";
+}
+
+function deleteAlarm(alarmName){
+	$.ajax({
+		method: "POST",
+		url: "./server/deleteAlarm.php",
+		data: { name: alarmName },
+		statusCode: {
+			200: function (response) {
+				updateAlarmsList();
+			},
+			500: function (response) {
+				alert("The view could not be deleted, please try again later.");
+			}
+		}
+	});
+}
+
 function checkName(){
 	var name_ui = document.getElementById("name").value;
 	
@@ -121,7 +142,8 @@ function updateAlarmsList(){
 					var new_alarm_block_delete = document.createElement('p');
 					var new_alarm_block_delete_input = document.createElement('button');
 					new_alarm_block_delete_input.className = "buttonDelete";
-					new_alarm_block_delete_input.onclick = function() { deleteHourConfirmation(this); };
+					new_alarm_block_delete_input.id = response[i].name;
+					new_alarm_block_delete_input.onclick = function() { deleteAlarmConfirmation(this); };
 					new_alarm_block_delete_input.innerHTML = "Delete Alarm";
 					
 					new_alarm_block.appendChild(new_alarm_block_title);

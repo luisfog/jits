@@ -22,7 +22,7 @@
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<script type="text/javascript" src="js/createAlarm.js"></script>
+	<script type="text/javascript" src="js/alarm.js"></script>
 
   </head>
   <body>
@@ -171,6 +171,23 @@
 		</div>
 	</div>
 	
+	<div class="modal" id="modalDelete" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
+					<h3 class="modal-title">Delete View</h3>
+				</div>
+				<div class="modal-body" id="modalCloseText" >
+					<p>Are you sure you want to delete this View?</p>
+				</div>
+				<div class="modal-footer">
+					<button id="modalYesButton" type="button" class="btn btn-export" onclick="" >Yes</button>
+					<button type="button" class="btn btn-default" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </body>

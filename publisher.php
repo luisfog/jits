@@ -1,6 +1,6 @@
 <?php
 	ini_set('display_errors', '0');
-
+	
 	if( isset($_GET['con']) ){
 		
 		include("./server/dbinfo.php");
@@ -71,18 +71,30 @@
 							case "1":
 								if($value == $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is equal ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." == ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is equal ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val != ".$entry["target"];
+												" AND ".$entry["value"]." != ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was equal than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." == ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was equal than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -90,18 +102,30 @@
 							case "2":
 								if($value != $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is different than ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." != ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is different than ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val == ".$entry["target"];
+												" AND ".$entry["value"]." == ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was different than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." != ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was different than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -109,18 +133,30 @@
 							case "3":
 								if($value < $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is less than ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." < ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is less than ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val >= ".$entry["target"];
+												" AND ".$entry["value"]." >= ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." < ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -128,18 +164,30 @@
 							case "4":
 								if($value > $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is greater than ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." > ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is greater than ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val <= ".$entry["target"];
+												" AND ".$entry["value"]." <= ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." > ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -147,18 +195,30 @@
 							case "5":
 								if($value <= $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is less or equal than ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." <= ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is less or equal than ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val > ".$entry["target"];
+												" AND ".$entry["value"]." > ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less or equal than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." <= ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less or equal than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -166,18 +226,30 @@
 							case "6":
 								if($value >= $entry["target"]){
 									if($entry["time_target"] == "0"){
-										$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-										$msg .= "'".$entry["value"]."' is greater or equal than ".$entry["value"];
-										sendMail($conn, $entry["name"], $msg);
+										$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+													" WHERE creation > DATE_SUB(NOW(), INTERVAL 1 HOUR)) as c".
+													" WHERE ".$entry["value"]." >= ".$entry["target"];
+										$resultLast = $conn->query($sqlLast);
+										if ($resultLast && $resultLast->num_rows == 0) {
+											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+											$msg .= "'".$entry["value"]."' is greater or equal than ".$entry["target"];
+											sendMail($conn, $entry["name"], $msg);
+										}
 									}else{
-										$sqlTime = "SELECT ".$entry["value"]." as val FROM client_".$_GET['con']." WHERE".
+										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
 												" creation >= DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
-												" AND val < ".$entry["target"];
+												" AND ".$entry["value"]." < ".$entry["target"];
 										$resultTime = $conn->query($sqlTime);
 										if ($resultTime && $resultTime->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater or equal than ".$entry["value"];
-											sendMail($conn, $entry["name"], $msg);
+											$sqlLast = "SELECT * FROM (SELECT ".$entry["value"]." FROM client_".$_GET['con'].
+														" WHERE creation < DATE_SUB(NOW(), INTERVAL ".$entry["time_target"]." MINUTE)".
+														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." >= ".$entry["target"];
+											$resultLast = $conn->query($sqlLast);
+											if ($resultLast && $resultLast->num_rows == 0) {
+												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater or equal than ".$entry["target"];
+												sendMail($conn, $entry["name"], $msg);
+											}
 										}
 									}
 								}
@@ -226,9 +298,9 @@
 		if ($result && $result->num_rows > 0) {
 			$lastRow = $result->fetch_assoc();
 			
-			$headers = "From: JITS <no-reply@jits.com>\n";
-			$headers .= "Reply-To: ".$lastRow["user"]." <".$lastRow["email"].">\n";		
-
+			$to_address = $lastRow["email"];
+			$headers = "From: JITS <no-reply@jits.com>\n";		
+			
 			$mailsent = mail($to_address, $subject, $message, $headers);
 
 			return ($mailsent)?(true):(false);
