@@ -5,7 +5,6 @@ var labels = [];
 var dataArr = [];
 var dataArrKeys = [];
 
-var colorNames = Object.keys(window.chartColors);
 var chart;
 var myChart;
 

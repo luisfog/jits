@@ -185,11 +185,12 @@ function createAlarms(serverI, userI, passI){
 function createWebUser(serverI, userI, passI){	
 	var webUserI = document.getElementById("webUser").value;
 	var webPassI = document.getElementById("webPass").value;
+	var emailI = document.getElementById("email").value;
 	
 	$.ajax({
 		method: "POST",
 		url: "./server/init.php",
-		data: { server: serverI, user: userI, pass: passI, order: "webUuser", webUser: webUserI , webPass: webPassI},
+		data: { server: serverI, user: userI, pass: passI, order: "webUuser", webUser: webUserI, webPass: webPassI, email: emailI},
 		statusCode: {
 			201: function (response) {
 				document.getElementById("createWebUser").style.visibility = "visible";
@@ -202,16 +203,14 @@ function createWebUser(serverI, userI, passI){
 	});
 }
 
-function deleteInit(serverI, userI, passI){	
-	var webUserI = document.getElementById("webUser").value;
-	var webPassI = document.getElementById("webPass").value;
+function deleteInit(serverI, userI, passI){
 	
 	$.ajax({
 		method: "POST",
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "deleteInit"},
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("deleteInits").style.visibility = "visible";
 				document.getElementById("refresh").style.visibility = "visible";
 				setTimeout(decounter, 1000);

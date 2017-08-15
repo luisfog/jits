@@ -5,7 +5,10 @@
 		$password = $_POST["pass"];
 
 		ini_set('display_errors', '0');
-		if(strcmp($_POST['order'], "permissions") == 0 || strcmp($_POST['order'], "clients") == 0 || strcmp($_POST['order'], "views") == 0 || strcmp($_POST['order'], "webUuser") == 0){
+		if(strcmp($_POST['order'], "permissions") == 0 || strcmp($_POST['order'], "clients") == 0 ||
+			strcmp($_POST['order'], "views") == 0 || strcmp($_POST['order'], "alarms") == 0 ||
+			strcmp($_POST['order'], "webUuser") == 0){
+				
 			include("./dbinfo.php");
 			
 			$conn = new mysqli($servername, $username, $password, $database);
@@ -23,7 +26,7 @@
 				echo "Error creating MySQL information, missing parameters.";
 				return;
 			}
-			file_put_contents("dbinfo.php", "<?php", FILE_APPEND);
+			file_put_contents("dbinfo.php", "<?php\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$databaseHost = \"".$servername."\";\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$database = \"".$_POST['database']."\";\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$user = \"".$username."\";\n", FILE_APPEND);
@@ -124,7 +127,7 @@
 				return;
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
-				echo "Error creating clients table: " . $conn->error;
+				echo "Error creating views table: " . $conn->error;
 				$conn->close();
 				return;
 			}
@@ -135,18 +138,18 @@
 					connection_key VARCHAR(30) NOT NULL,
 					client_name VARCHAR(30) NOT NULL,
 					value VARCHAR(30) NOT NULL,
-					cond INT(4) NOT NULL,
+					cond INT(6) NOT NULL,
 					target FLOAT(15,7) NOT NULL,
 					time_target INT(6) NOT NULL
 					)";
 			if ($conn->query($sql) === TRUE) {
 				header("HTTP/1.1 201 Created");
-				echo "Views table created successfully";
+				echo "Alarm table created successfully";
 				$conn->close();
 				return;
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
-				echo "Error creating clients table: " . $conn->error;
+				echo "Error creating alarms table: " . $conn->error;
 				$conn->close();
 				return;
 			}
@@ -170,6 +173,9 @@
 				$hash = password_hash($webPass, PASSWORD_DEFAULT);
 				$sql = "INSERT INTO webUsers (user, pass, email) VALUES ('$webUser', '$hash', '$email')";
 				if ($conn->query($sql) === TRUE) {
+					session_start();
+					$_SESSION["name"] = $webUser;
+				
 					header("HTTP/1.1 201 Created");
 					echo "Web user created successfully";
 					$conn->close();
@@ -187,8 +193,10 @@
 				return;
 			}
 		}else if(strcmp($_POST['order'], "deleteInit") == 0){
-			//unlink('../js/init.js');
-			//unlink('./init.php');
+			header("HTTP/1.1 200 OK");
+			unlink('../js/init.js');
+			unlink('./init.php');
+			return;
 		}
 
 		$conn->close();

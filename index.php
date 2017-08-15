@@ -1,9 +1,16 @@
 <?php
 	ini_set('display_errors', '0');
-	session_start();
-	if(!isset($_SESSION['name'])){
-		header('Location: ./login.html' );
-		return;
+	
+	$init = false;
+	if (file_exists("./server/dbinfo.php"))
+		$init = true;
+	
+	if($init){
+		session_start();
+		if(!isset($_SESSION['name'])){
+			header('Location: ./login.html' );
+			return;
+		}
 	}
 ?>
 
@@ -23,17 +30,12 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<?php
-		$init = false;
-		if (file_exists("./server/dbinfo.php")){
-			$init = true;
+		if ($init){
 	?>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
-		<script src="js/utils.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 	<?php
 		}else{
 	?>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script type="text/javascript" src="js/init.js"></script>
 	<?php
 		}

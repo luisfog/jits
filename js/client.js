@@ -4,7 +4,6 @@ var firstReal = true;
 var labels = [];
 var dataArr = [];
 
-var colorNames = Object.keys(window.chartColors);
 var chart;
 var myChart;
 

@@ -22,7 +22,7 @@
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<script type="text/javascript" src="js/settings.js"></script>«
+	<script type="text/javascript" src="js/settings.js"></script>
 
   </head>
   <body>
