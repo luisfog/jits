@@ -11,6 +11,11 @@ var myChart;
 function initChart(){
 	chart = document.getElementById('chart');
 	myChart = echarts.init(chart);
+	
+	var valuesArr = values.split(", ");
+	for(var i=0; i<valuesArr.length; i++){
+		dataArr[i] = [];
+	}
 }
 				
 var options = 	{
@@ -95,6 +100,11 @@ function getData(){
 			while(options.legend.data.length > 0) options.legend.data.pop();
 			while(options.xAxis.data.length > 0) options.xAxis.data.pop();
 			while(options.series.length > 0) options.series.pop();
+			
+			var valuesArr = values.split(", ");
+			for(var i=0; i<valuesArr.length; i++){
+				dataArr[i] = [];
+			}
 		}
 	}else
 		stop = true;
@@ -173,7 +183,8 @@ function getData(){
 					myChart.setOption(options);
 				}else{
 					for(var i=0; i<dataArr.length; i++){
-						delete options.series[i]["type"];			
+						if(options.series[i] != null)
+							delete options.series[i]["type"];
 					}
 					myChart.setOption({
 						legend:{ data: valuesArr},
