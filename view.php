@@ -21,6 +21,7 @@
     <link href="css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<script type="text/javascript" src="js/view.js"></script>
 		
@@ -126,12 +127,13 @@
 							<div class='col-xl-12 col-lg-12 col-md-12'>
 								<h2><b>
 	<?php
-		$sql = "SELECT name, connection_key, client_name, value FROM views WHERE name LIKE '".$_REQUEST["view"]."'";
+		$sql = "SELECT name, connection_key, client_name, value, column_name FROM views WHERE name LIKE '".$_REQUEST["view"]."'";
 		$result = $conn->query($sql);
 		$name = "";
 		$connectionKeys = array();
 		$clients = array();
 		$valuesName = array();
+		$columnsNameArr = array();
 		$values = "";
 		$totalPushes = 0;
 		$i = 0;
@@ -141,7 +143,8 @@
 				$name = $row["name"];
 				$connectionKeys[$i] = $row["connection_key"];
 				$clients[$i] = $row["client_name"];
-				$valuesName[$i++] = $row["value"];
+				$valuesName[$i] = $row["value"];
+				$columnsNameArr[$i++] = $row["column_name"];
 			}
 		}
 		
@@ -157,7 +160,7 @@
 				$totalPushes += (int)$numberRows["num"];
 			}
 			
-			$values .= $clients[$j]."::".$valuesName[$j].", ";
+			$values .= $clients[$j]."::".$valuesName[$j]." (".$columnsNameArr[$j]."), ";
 		}
 		$values = substr($values, 0, -2);
 		
@@ -167,9 +170,10 @@
 		
 		if ($totalPushes > 0) {
 			echo "<script>var connectionKeysList = '".implode(",", $connectionKeys)."';</script>";
-			echo "<script>var clientsNamesList = '".implode(",", $clients)."';</script>";
+			echo "<script>var columnsNamesList = '".implode(",", $columnsNameArr)."';</script>";
 			echo "<script>var valuesList = '".implode(",", $valuesName)."';</script>";
-			echo "<script>var valuesNamesList = '$values';</script>";
+			//echo "<script>var valuesNamesList = '$values';</script>";
+			echo "<script>var valuesNamesList = '$columnsName';</script>";
 			echo "<script>var viewName = '$name';</script>";
 			echo "<script>window.onload = function(){";
 			echo "		initChart();";
@@ -206,6 +210,9 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 thumbnail">
+							<div class="col-12" style="margin: 10px 0 10px 0;" align="center">
+								<img id="loading" src="./img/ajax-loader.gif" style="visibility: hidden;" />
+							</div>
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								<div id="chart" style=" height: 500px;"></div>
 							</div>
@@ -226,7 +233,7 @@
 					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
 					<h3 class="modal-title">Export Data</h3>
 				</div>
-				<div class="modal-body" id="modalCloseText" >
+				<div class="modal-body" >
 					<p>Please select the type of export:</p>
 					
 					<label><input type="radio" name="typeExport" value="csv" checked> CSV</label><br/>
@@ -248,7 +255,7 @@
 					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
 					<h3 class="modal-title">Delete View</h3>
 				</div>
-				<div class="modal-body" id="modalCloseText" >
+				<div class="modal-body" >
 					<p>Are you sure you want to delete this View?</p>
 				</div>
 				<div class="modal-footer">

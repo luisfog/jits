@@ -215,9 +215,9 @@
 			
 			if($data == true){
 				echo "Last 24 hour deviation";
-				echo "<div id='chart_$i' style='width: 100%; height: 200px;'></div>";
+				echo "<div id='chart_v_$i' style='width: 100%; height: 200px;'></div>";
 				
-				echo "<script>createChart('chart_$i', dataArr[$i]);</script>";			
+				echo "<script>createChart('chart_v_$i', dataArr[$i]);</script>";			
 					
 			}else{
 				echo "<div style='width: 100%; height: 200px;'><br/>No data (at least in the last 24 hours)<br/><br/></div>";
@@ -288,9 +288,9 @@
 			
 			if($data == true){
 				echo "Last 24 hour deviation";
-				echo "<div id='chart_$i' style='width: 100%; height: 200px;'></div>";
+				echo "<div id='chart_c_$i' style='width: 100%; height: 200px;'></div>";
 				
-				echo "<script>createChart('chart_$i', dataArr[$i]);</script>";			
+				echo "<script>createChart('chart_c_$i', dataArr[$i]);</script>";			
 					
 			}else{
 				echo "<div style='width: 100%; height: 200px;'><br/>No data (at least in the last 24 hours)<br/><br/></div>";

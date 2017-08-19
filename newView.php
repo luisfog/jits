@@ -110,9 +110,9 @@
 				
 				<br/><br/><br/>
 				
-				<div class="row login-page">
+				<div class="row login-page" style="width: 400px">
 					<h2>Create View</h2>
-					<div class="form">
+					<div class="form" style="max-width: 400px">
 						<input id="name" type="text" placeholder="Name" style="margin: 10px 0 10px 0;" />
 						<hr/>
 						<select id="client" style="margin: 10px 0 10px 0;" onChange="changeValues();">
@@ -124,12 +124,14 @@
 						<select id="value" style="margin: 10px 0 10px 0;">
 							<option value="-" selected>Select a value</option>
 						</select>
+						<input id="volumnName" type="text" placeholder="Column Name" style="margin: 10px 0 10px 0;" />
 						<button onclick="addValue()">Add Value</button>
 						<br/><br/>
 						<table id="values">
 							<tr class="header">
-								<th style="width: 45%">Client</th>
-								<th style="width: 40%">Value</th>
+								<th style="width: 35%">Client</th>
+								<th style="width: 35%">Value</th>
+								<th style="width: 15%">Name</th>
 								<th style="width: 15%"> </th>
 							</tr>
 						</table>

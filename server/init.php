@@ -118,7 +118,8 @@
 					name VARCHAR(30) NOT NULL,
 					connection_key VARCHAR(30) NOT NULL,
 					client_name VARCHAR(30) NOT NULL,
-					value VARCHAR(30) NOT NULL
+					value VARCHAR(30) NOT NULL,
+					column_name VARCHAR(30) NOT NULL
 					)";
 			if ($conn->query($sql) === TRUE) {
 				header("HTTP/1.1 201 Created");

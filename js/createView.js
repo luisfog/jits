@@ -31,7 +31,8 @@ function createView(){
 	for (var i = 1, row; row = tableValues.rows[i]; i++) {
 		list_ui += "{\"connectionKey\":\"" + row.cells[0].title + "\",";
 		list_ui += "\"clientName\":\"" + row.cells[0].innerHTML + "\",";
-		list_ui += "\"value\":\"" + row.cells[1].innerHTML + "\"},";
+		list_ui += "\"value\":\"" + row.cells[1].innerHTML + "\",";
+		list_ui += "\"columnName\":\"" + row.cells[2].innerHTML + "\"},";
 	}
 	
 	if(list_ui.length > 2)
@@ -125,26 +126,38 @@ function addValue(){
 	var keyClient = client.value;
 	var nameClient = client.options[client.selectedIndex].innerHTML;
 	var value = document.getElementById("value").value;
+	var columnValue = document.getElementById("volumnName").value;
 	
 	if(keyClient == "-" || value == "-")
 		return;
 	
 	var tableValues = document.getElementById("values");
 	
+	if(columnValue == "")
+		columnValue = nameClient + "::" + value;
+	
 	for (var i = 1, row; row = tableValues.rows[i]; i++) {
-		if(row.cells[0].title == keyClient && row.cells[1].innerHTML == value)
+		if(row.cells[0].title == keyClient && row.cells[1].innerHTML == value){
+			alert("You already use that Value.");
 			return;
+		}
+		if(row.cells[2].innerHTML == columnValue){
+			alert("You already use that Column Name.");
+			return;
+		}
 	}
 	
 	var row = tableValues.insertRow(-1);
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
     var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
     cell1.title = keyClient;
     cell1.innerHTML = nameClient;
     cell2.innerHTML = value;
-    cell3.innerHTML = "<div class='x spin small slow'><b></b><b></b><b></b><b></b></div>";
-	cell3.onclick = function () {
+    cell3.innerHTML = columnValue;
+    cell4.innerHTML = "<div class='x spin small slow'><b></b><b></b><b></b><b></b></div>";
+	cell4.onclick = function () {
             var p=this.parentNode;
 			p.parentNode.removeChild(p);
         };

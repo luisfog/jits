@@ -14,12 +14,12 @@
 		return ($a['creation'] < $b['creation']) ? -1 : 1;
 	}
 
-	if( isset($_POST['name']) && isset($_POST['connectionKeys']) && isset($_POST['clientsNames']) && isset($_POST['values']) && isset($_POST['dataLong'])){
+	if( isset($_POST['name']) && isset($_POST['connectionKeys']) && isset($_POST['columnsNames']) && isset($_POST['values']) && isset($_POST['dataLong'])){
 		include("./dbinfo.php");
 		
 		$name = $_POST['name'];
 		$connectionKeys = explode(",", $_POST['connectionKeys']);
-		$clientsNames = explode(",", $_POST['clientsNames']);
+		$columnsNames = explode(",", $_POST['columnsNames']);
 		$values = explode(",", $_POST['values']);
 		$dataLong = $_POST['dataLong'];
 		
@@ -71,7 +71,7 @@
 			if($result){
 				while($entry = $result->fetch_assoc()) {
 					$rows[$rowIndex]["creation"] = $entry["creation"];
-					$rows[$rowIndex++][$clientsNames[$i]."::".$values[$i]] = $entry[$values[$i]];
+					$rows[$rowIndex++][$columnsNames[$i]] = $entry[$values[$i]];
 				}
 			}
 		}

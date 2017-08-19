@@ -113,6 +113,12 @@ function getData(){
 	else
 		dataLong_ui = dataLong_ui.options[dataLong_ui.selectedIndex].value;
 	
+	var load = false;
+	if(stop){
+		document.getElementById("loading").style.visibility = 'visible';
+		load = true;
+	}
+	
 	$.ajax({
 		method: "POST",
 		url: "./server/getData.php",
@@ -191,17 +197,28 @@ function getData(){
 						xAxis:{ data: labels}
 					});
 				}
-	
+				
+				if(load)
+					document.getElementById("loading").style.visibility = 'hidden';
 				firstReal = false;
 			},
 			500: function (response) {
 				alert("Cannot read the requested data.");
+				
+				if(load)
+					document.getElementById("loading").style.visibility = 'hidden';
 			}
 		}
 	});
 	
 	if(!stop)
-		setTimeout(getData, 1000);
+		setTimeout(getDataRT, 1000);
+}
+
+function getDataRT(){
+	if(stop)
+		return;
+	getData();
 }
 
 window.onresize = function(event) {

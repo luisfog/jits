@@ -23,9 +23,9 @@
 		for($i = 0; $i < count($arr); $i++){
 			$obj = (Array)$arr[$i];
 			
-			$sql = "INSERT INTO views (name, connection_key, client_name, value)".
-				"VALUES ('$name', '".$obj["connectionKey"]."', '".$obj["clientName"]."', '".$obj["value"]."')";
-			echo $sql."_";
+			$sql = "INSERT INTO views (name, connection_key, client_name, value, column_name)".
+				"VALUES ('$name', '".$obj["connectionKey"]."', '".$obj["clientName"]."', '".$obj["value"]."', '".$obj["columnName"]."')";
+			
 			if ($conn->query($sql) !== TRUE) {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating view: " . $conn->error;

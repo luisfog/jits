@@ -12,7 +12,7 @@ function initChart(){
 	chart = document.getElementById('chart');
 	myChart = echarts.init(chart);
 	
-	var valuesArr = valuesNamesList.split(", ");
+	var valuesArr = columnsNamesList.split(",");
 	for(var i=0; i<valuesArr.length; i++){
 		dataArr[i] = [];
 		dataArrKeys[i] = valuesArr[i];
@@ -103,7 +103,7 @@ function getData(){
 			while(options.xAxis.data.length > 0) options.xAxis.data.pop();
 			while(options.series.length > 0) options.series.pop();
 			
-			var valuesArr = valuesNamesList.split(", ");
+			var valuesArr = columnsNamesList.split(",");
 			for(var i=0; i<valuesArr.length; i++){
 				dataArr[i] = [];
 				dataArrKeys[i] = valuesArr[i];
@@ -118,10 +118,16 @@ function getData(){
 	else
 		dataLong_ui = dataLong_ui.options[dataLong_ui.selectedIndex].value;
 	
+	var load = false;
+	if(stop){
+		document.getElementById("loading").style.visibility = 'visible';
+		load = true;
+	}
+	
 	$.ajax({
 		method: "POST",
 		url: "./server/getViewData.php",
-		data: { name: viewName, connectionKeys: connectionKeysList, clientsNames: clientsNamesList,
+		data: { name: viewName, connectionKeys: connectionKeysList, columnsNames: columnsNamesList,
 				values: valuesList, dataLong: dataLong_ui },
 		statusCode: {
 			200: function (response) {
@@ -171,7 +177,7 @@ function getData(){
 					}
 				}
 				
-				var valuesArr = valuesNamesList.split(", ");
+				var valuesArr = columnsNamesList.split(",");
 				
 				var seriesArr = [];
 				
@@ -210,17 +216,28 @@ function getData(){
 						xAxis:{ data: labels}
 					});
 				}
-	
+				
+				if(load)
+					document.getElementById("loading").style.visibility = 'hidden';
 				firstReal = false;
 			},
 			500: function (response) {
 				alert("Cannot read the requested data.");
+				
+				if(load)
+					document.getElementById("loading").style.visibility = 'hidden';
 			}
 		}
 	});
 	
 	if(!stop)
-		setTimeout(getData, 1000);
+		setTimeout(getDataRT, 1000);
+}
+
+function getDataRT(){
+	if(stop)
+		return;
+	getData();
 }
 
 window.onresize = function(event) {

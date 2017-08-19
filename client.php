@@ -21,6 +21,7 @@
     <link href="css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<script type="text/javascript" src="js/client.js"></script>
 		
@@ -207,6 +208,9 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 thumbnail">
+							<div class="col-12" style="margin: 10px 0 10px 0;" align="center">
+								<img id="loading" src="./img/ajax-loader.gif" style="visibility: hidden;" />
+							</div>
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								<div id="chart" style=" height: 500px;"></div>
 							</div>
