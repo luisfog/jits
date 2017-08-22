@@ -51,15 +51,22 @@ if you don't have mysql root user privileges
 ## Creating you own connection (without a library)
 
 0. Open the server
+
 1. Create a client
+
 2. Copy and save the "Server", "Connection key", "AES key" and "AES iv"
+
 3. In your code, develop an AES encryption function
+
 4. In your code, create a JSON message with your values to send (without timestamp)
+
 5. In your code, encript your JSON message with your "AES key" and "AES iv"
-5. In your code, send a HTTP GET request for "Server"?con="Connection key"
+
+6. In your code, send a HTTP GET request for "Server"?con="Connection key"
    e.g. www.myJits.com/publisher.php?con=16f90df23806278df65eaa052faba8
-5.1. Put your encript JSON win the HTTP GET reques body
-6. Go to the server and see you data
+6.1. Put your encript JSON win the HTTP GET reques body
+
+7. Go to the server and see you data
 
 ## License
 
