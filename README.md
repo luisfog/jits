@@ -63,7 +63,9 @@ if you don't have mysql root user privileges
 5. In your code, encript your JSON message with your "AES key" and "AES iv"
 
 6. In your code, send a HTTP GET request for "Server"?con="Connection key"
+
    e.g. www.myJits.com/publisher.php?con=16f90df23806278df65eaa052faba8
+
 6.1. Put your encript JSON win the HTTP GET reques body
 
 7. Go to the server and see you data
