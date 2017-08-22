@@ -58,7 +58,9 @@ if you don't have mysql root user privileges
 
 3. In your code, develop an AES encryption function
 
-4. In your code, create a JSON message with your values to send (without timestamp)
+4. In your code, create a JSON message with your values (double variables) to send (without timestamp)
+
+   e.g. {"value1" : "12.4", "value2" : "5.9"}
 
 5. In your code, encript your JSON message with your "AES key" and "AES iv"
 
