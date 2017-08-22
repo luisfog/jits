@@ -44,7 +44,7 @@ Open the server
 ```
 ```
 3. Use one of the provided libraries: https://github.com/luisfog/jits/tree/master/libraries
-[libraries](/libraries)
+[libraries](libraries)
 ```
 ```
 4. Initiate library
