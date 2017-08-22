@@ -1,7 +1,7 @@
 # JSON IoT Server
-Web server to easly store data provided by low end hardware such as: ESP8266, Arduino (using any internet shield), Java program, and more
+Web server to easly store data provided by low-end hardware, such as, ESP8266, Arduino (using any internet shield) or high-end software, such as, Java
 
-Easy to install and configure (1 click configuration)
+Easy to install and configure
 
 ### Requirements
 
