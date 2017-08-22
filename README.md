@@ -16,7 +16,7 @@ Public web server with:
 ```
 ```
 if you don't have mysql root user privileges
-1.2. Create a database and user
+  1.2. Create a database and user
 ```
 ```
 2. Open index.php
@@ -26,7 +26,7 @@ if you don't have mysql root user privileges
 ```
 ```
 if you don't have mysql root user privileges
-3.2. Choose the option "Existing database and user"
+  3.2. Choose the option "Existing database and user"
 ```
 
 #### Notes
@@ -35,28 +35,36 @@ if you don't have mysql root user privileges
 
 ## Start sending data
 
-Open the server
-```
+0. Open the server
+
 1. Create a client
-```
-```
-2. Copy and save the "Connection key", "AES key" and "AES iv"
-```
-```
-3. Use one of the provided libraries: https://github.com/luisfog/jits/tree/master/libraries
-[libraries](libraries)
-```
-```
-4. Initiate library
-```
-```
+
+2. Copy and save the "Server", "Connection key", "AES key" and "AES iv"
+
+3. Use one of the provided [libraries](libraries)
+
+4. Initiate the library with your "Server", "Connection key", "AES key" and "AES iv"
+
 5. Send JSON data (the server will configure and create the database automatically)
-```
+
+
+## Creating you own connection (without a library)
+
+0. Open the server
+1. Create a client
+2. Copy and save the "Server", "Connection key", "AES key" and "AES iv"
+3. In your code, develop an AES encryption function
+4. In your code, create a JSON message with your values to send (without timestamp)
+5. In your code, encript your JSON message with your "AES key" and "AES iv"
+5. In your code, send a HTTP GET request for "Server"?con="Connection key"
+   e.g. www.myJits.com/publisher.php?con=16f90df23806278df65eaa052faba8
+5.1. Put your encript JSON win the HTTP GET reques body
+6. Go to the server and see you data
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-[libraries](libraries)
+
 #
 Have fun and enjoy!
 
