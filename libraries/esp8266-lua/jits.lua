@@ -5,7 +5,7 @@ function jits.fromArrayToJSON (names, values)
         return nil
     end
 
-    res = ""
+    local res = ""
     for i = 1, #names do
       res = res .. "\"" .. names[i] .. "\": \"" .. values[i] .. "\","
     end
@@ -37,7 +37,7 @@ function jits.sendData (server, connectionKey, encryptedJSON)
 end
 
 function jits.sendData (server, connectionKey, json, aesKey, aesIV)
-    encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
+    local encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
     http.post(jits.createURL(server, connectionKey),
             "Content-Type: text/plain"..
             "Content-Length: " .. string.len(encryptedJSON),
@@ -52,12 +52,12 @@ function jits.sendData (server, connectionKey, json, aesKey, aesIV)
 end
 
 function jits.sendData (server, connectionKey, names, values, aesKey, aesIV)
-    json = jits.fromArrayToJSON (names, values)
+    local json = jits.fromArrayToJSON (names, values)
     if json == nil then
         print ("Error creating json")
         return
     end
-    encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
+    local encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
     http.post(jits.createURL(server, connectionKey),
             "Content-Type: text/plain"..
             "Content-Length: " .. string.len(encryptedJSON),

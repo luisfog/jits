@@ -3,22 +3,22 @@ jits = require "jits"
 
 function loop()
 
-    status, temp, humi, temp_dec, humi_dec = dht.read(7)
+    local status, temp, humi, temp_dec, humi_dec = dht.read(7)
 
-    server = "http://yourserver/publisher.php"
-    connectionKey = "your connection key"
-    aesKey = "your aes key"
-    aesIV = "your aes iv"
+    local server = "http://yourserver/publisher.php"
+    local connectionKey = "your connection key"
+    local aesKey = "your aes key"
+    local aesIV = "your aes iv"
     
     
     if status == dht.OK then
-        msg = string.format("{\"temp\" : \"%f\", \"hum\" : \"%f\"}",
+        local msg = string.format("{\"temp\" : \"%f\", \"hum\" : \"%f\"}",
               temp,
               humi
         )
 
-        names = {'temp', 'hum'}
-        values = {temp, humi}
+        local names = {'temp', 'hum'}
+        local values = {temp, humi}
 
         jits.sendData (server, connectionKey, names, values, aesKey, aesIV)
         
