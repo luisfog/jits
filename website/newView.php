@@ -21,7 +21,7 @@
     <link href="css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<script type="text/javascript" src="js/createClient.js"></script>
+	<script type="text/javascript" src="js/createView.js"></script>
 
   </head>
   <body>
@@ -58,10 +58,12 @@
 		
 		$sql = "SELECT * FROM clients ORDER BY name";
 		$result = $conn->query($sql);
+		$optionClients = "";
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
 				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
+				$optionClients .= "<option value='".$row["connection_key"]."'>".$row["name"]."</option>";
 			}
 		}
 	?>
@@ -108,37 +110,38 @@
 				
 				<br/><br/><br/>
 				
-				<div class="row login-page">
-					<h2>Create Client</h2>
-					<div class="form">
+				<div class="row login-page" style="width: 400px">
+					<h2>Create View</h2>
+					<div class="form" style="max-width: 400px">
 						<input id="name" type="text" placeholder="Name" style="margin: 10px 0 10px 0;" />
-						<select id="AES" style="margin: 10px 0 10px 0;">
-							<option value="128" selected>AES - 128</option>
-							<option value="192" >AES - 192</option>
-							<option value="256" >AES - 256</option>
-						</select>
-						<select id="type" style="margin: 10px 0 10px 0;">
-							<option value="128" selected>Publisher</option>
-							<option value="192" >Subscribe (TODO)</option>
-						</select>
-						<button onclick="checkName()">Create Client</button>
-						<br/><hr/>
-						<h5><b>Tasks</b></h5><hr/>
-						<p>Check name availability<span class="ok" id="nameAvailable">OK</span></p>
-						<p>Generate connection<span class="ok" id="generateConn">OK</span></p>
-						<p>Generate AES key<span class="ok" id="generateAES">OK</span></p>
-						<p>Generate AES iv<span class="ok" id="generateAESiv">OK</span></p>
-						<p>Register client<span class="ok" id="registerClient">OK</span></p>
 						<hr/>
-						<h5><b>Data</b></h5><hr/>
-						<p>Server:<p>
-						<p class="ok" id="connServer">OK<p>
-						<p>Connection key:<p>
-						<p class="ok" id="connKey">OK<p>
-						<p>AES key:<p>
-						<p class="ok" id="aesKey">OK<p>
-						<p>AES iv:<p>
-						<p class="ok" id="aesIV">OK<p>
+						<select id="client" style="margin: 10px 0 10px 0;" onChange="changeValues();">
+							<option value="-" selected>Select a client</option>
+	<?php
+		echo $optionClients;
+	?>
+						</select>
+						<select id="value" style="margin: 10px 0 10px 0;">
+							<option value="-" selected>Select a value</option>
+						</select>
+						<input id="volumnName" type="text" placeholder="Column Name" style="margin: 10px 0 10px 0;" />
+						<button onclick="addValue()">Add Value</button>
+						<br/><br/>
+						<table id="values">
+							<tr class="header">
+								<th style="width: 35%">Client</th>
+								<th style="width: 35%">Value</th>
+								<th style="width: 15%">Name</th>
+								<th style="width: 15%"> </th>
+							</tr>
+						</table>
+						<hr/>
+						<button id="startScroll" onclick="checkName()">Create View</button>
+						<hr/>
+						<h5 id="results"><b>Tasks</b></h5><hr/>
+						<p>Starting<span class="ok" id="starting">OK</span></p>
+						<p>Check name availability<span class="ok" id="nameAvailable">OK</span></p>
+						<p>Register View<span class="ok" id="registerView">OK</span></p>
 					</div>
 				</div>
 				
@@ -148,5 +151,13 @@
 	
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script>
+		$("#startScroll").click(function() {
+			$("#starting").css("visibility","visible");
+			$('html, body').animate({
+				scrollTop: $("#results").offset().top
+			}, 2000);
+		});
+	</script>
   </body>
 </html>

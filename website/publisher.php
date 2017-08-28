@@ -24,15 +24,10 @@
 		
 		$input = file_get_contents('php://input');
 		
-		//echo $input."--\n";
-		//echo $client["aes_key"]."\n";
-		//echo $client["aes_iv"]."\n";
-		
 		$inputDec = fnDecrypt($input, $client["aes_key"], $client["aes_iv"]);
 		$inputDec = substr($inputDec, 0, strrpos($inputDec, "}")+1);
 		$jsonArray = json_decode($inputDec, true);
 		
-		//echo $inputDec."\n";
 		$createValues = "";
 		$insert = "";
 		$values = "";

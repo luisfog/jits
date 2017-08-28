@@ -325,9 +325,10 @@
 						<input id="database" type="text" placeholder="MySQL database, e.g. jitsDB" style="margin: 10px 0 10px 0;" disabled />
 						<input id="user" type="text" placeholder="MySQL root username, e.g. root" style="margin: 10px 0 10px 0;" />
 						<input id="pass" type="password" placeholder="MySQL root password" style="margin: 10px 0 10px 0;" />
-						<button onclick="createWorld()">Auto-Configuration</button>
+						<button id="startScroll" onclick="createWorld()">Auto-Configuration</button>
 						<br/><hr/>
-						<h5><b>Tasks</b></h5><hr/>
+						<h5 id="results"><b>Tasks</b></h5><hr/>
+						<p>Starting<span class="ok" id="starting">OK</span></p>
 						<p>Create database<span class="ok" id="createDatabase">OK</span></p>
 						<p>Create DB user<span class="ok" id="createUser">OK</span></p>
 						<p>Give the right permissions<span class="ok" id="givePermissions">OK</span></p>
@@ -348,5 +349,13 @@
 	
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script>
+		$("#startScroll").click(function() {
+			$("#starting").css("visibility","visible");
+			$('html, body').animate({
+				scrollTop: $("#results").offset().top
+			}, 2000);
+		});
+	</script>
   </body>
 </html>
