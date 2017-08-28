@@ -35,7 +35,7 @@ if you don't have mysql root user privileges
 
 ## Start sending data
 
-0. Open the server
+0. Access the server (e.g. www.myJits.com)
 
 1. Create a client
 
@@ -50,7 +50,7 @@ if you don't have mysql root user privileges
 
 ## Creating you own connection (without a library)
 
-0. Open the server
+0. Access the server (e.g. www.myJits.com)
 
 1. Create a client
 
