@@ -54,7 +54,7 @@ if you don't have mysql root user privileges
 
 1. Create a client
 
-2. Copy and save the "Server", "Connection key", "AES key" and "AES iv"
+2. Copy and save the "Server", "Connection key", "AES key" (base64) and "AES iv" (base64)
 
 3. In your code, develop an AES encryption function
 
@@ -63,6 +63,8 @@ if you don't have mysql root user privileges
    e.g. {"value1" : "12.4", "value2" : "5.9"}
 
 5. In your code, encript your JSON message with your "AES key" and "AES iv"
+
+   5.1. Encode your JSON to base64
 
 6. In your code, send a HTTP POST request for "Server"?con="Connection key"
 
