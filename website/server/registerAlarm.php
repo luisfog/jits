@@ -32,7 +32,7 @@
 				VALUES ('$name', '$connectionKey', '$clientName', '$value', $condition, $target, $timeExecution)";
 				
 		if ($conn->query($sql) === TRUE) {
-			header("HTTP/1.1 201 Created");
+			header("HTTP/1.1 200 OK");
 			echo "Alarm created successfully";
 			$conn->close();
 			return;

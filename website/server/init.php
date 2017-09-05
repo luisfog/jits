@@ -33,14 +33,14 @@
 			file_put_contents("dbinfo.php", "\$pass = \"".$password."\";\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "?>", FILE_APPEND);
 			
-			header("HTTP/1.1 201 Created");
+			header("HTTP/1.1 200 OK");
 			echo "Database info stored successfully";
 			return;
 		}if(strcmp($_POST['order'], "database") == 0){
 			$sql = "CREATE DATABASE jitsdb";
 			
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "Database created successfully";
 				$conn->close();
 				return;
@@ -57,9 +57,9 @@
 			$rawKey = hash('ripemd160', "pass".microtime()).hash('ripemd160', "pass".microtime());
 			$password = substr($rawKey, 0, 15);
 			
-			$sql = "CREATE USER '$username'@'$servername' IDENTIFIED BY 'ilovedata';";
+			$sql = "CREATE USER '$username'@'$servername' IDENTIFIED BY '$password';";
 			
-			file_put_contents("dbinfo.php", "<?php", FILE_APPEND);
+			file_put_contents("dbinfo.php", "<?php\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$databaseHost = \"".$servername."\";\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$database = \"jitsdb\";\n", FILE_APPEND);
 			file_put_contents("dbinfo.php", "\$user = \"".$username."\";\n", FILE_APPEND);
@@ -67,7 +67,7 @@
 			file_put_contents("dbinfo.php", "?>", FILE_APPEND);
 			
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "User created successfully";
 				$conn->close();
 				return;
@@ -80,7 +80,7 @@
 		}else if(strcmp($_POST['order'], "permissions") == 0){
 			$sql = "GRANT ALL PRIVILEGES ON $database.* TO '$user'@'$databaseHost';";
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "Permissions successfully granted";
 				$conn->close();
 				return;
@@ -99,10 +99,11 @@
 					type VARCHAR(10) NOT NULL,
 					connection_key VARCHAR(30) NOT NULL,
 					aes_key VARCHAR(36) NOT NULL,
-					aes_iv VARCHAR(36) NOT NULL
+					aes_iv VARCHAR(36),
+					date_last_iv TIMESTAMP
 					)";
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "Clients table created successfully";
 				$conn->close();
 				return;
@@ -122,7 +123,7 @@
 					column_name VARCHAR(30) NOT NULL
 					)";
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "Views table created successfully";
 				$conn->close();
 				return;
@@ -144,7 +145,7 @@
 					time_target INT(6) NOT NULL
 					)";
 			if ($conn->query($sql) === TRUE) {
-				header("HTTP/1.1 201 Created");
+				header("HTTP/1.1 200 OK");
 				echo "Alarm table created successfully";
 				$conn->close();
 				return;
@@ -155,7 +156,7 @@
 				return;
 			}
 		}else if(strcmp($_POST['order'], "webUuser") == 0){
-			if( !isset($_POST['webUser']) || !isset($_POST['webPass']) || !isset($_POST['email'])){
+			if( !isset($_POST['webUser']) || !isset($_POST['webPass']) || !isset($_POST['email']) || !isset($_POST['timezone'])){
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error inserting web user, missing parameters.";
 				return;
@@ -163,21 +164,23 @@
 			$webUser = $_POST["webUser"];
 			$webPass = $_POST["webPass"];
 			$email = $_POST["email"];
+			$timezone = $_POST["timezone"];
 			
 			$sql = "CREATE TABLE webUsers (
 					id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 					user VARCHAR(30) NOT NULL,
 					pass VARCHAR(255) NOT NULL,
-					email VARCHAR(255) NOT NULL
+					email VARCHAR(255) NOT NULL,
+					timezoneset VARCHAR(255) NOT NULL
 					)";
 			if ($conn->query($sql) === TRUE) {
 				$hash = password_hash($webPass, PASSWORD_DEFAULT);
-				$sql = "INSERT INTO webUsers (user, pass, email) VALUES ('$webUser', '$hash', '$email')";
+				$sql = "INSERT INTO webUsers (user, pass, email, timezoneset) VALUES ('$webUser', '$hash', '$email', '$timezone')";
 				if ($conn->query($sql) === TRUE) {
 					session_start();
 					$_SESSION["name"] = $webUser;
 				
-					header("HTTP/1.1 201 Created");
+					header("HTTP/1.1 200 OK");
 					echo "Web user created successfully";
 					$conn->close();
 					return;

@@ -47,7 +47,7 @@ function createView(){
 		url: "./server/registerView.php",
 		data: { name: name_ui, list: list_ui },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("registerView").style.visibility = "visible";
 				
 				updateViewList();

@@ -6,7 +6,25 @@ function updateMail(){
 	$.ajax({
 		method: "POST",
 		url: "./server/updateMail.php",
-		data: { name: webUser, email: mail },
+		data: { email: mail },
+		statusCode: {
+			200: function (response) {
+				document.getElementById('modalOk').style.display = 'block';
+			},
+			500: function (response) {
+				alert("There is something wrong with the server. Please try again later.");
+			}
+		}
+	});
+}
+
+function updateTimezone(){
+	var timezoneI = document.getElementById("timezone").value;
+	
+	$.ajax({
+		method: "POST",
+		url: "./server/updateTimezone.php",
+		data: { timezone: timezoneI },
 		statusCode: {
 			200: function (response) {
 				document.getElementById('modalOk').style.display = 'block';
@@ -42,7 +60,7 @@ function updatePass(){
 	$.ajax({
 		method: "POST",
 		url: "./server/updatePassword.php",
-		data: { name: webUser, oldPassword: pass, newPassword: newPass },
+		data: { oldPassword: pass, newPassword: newPass },
 		statusCode: {
 			200: function (response) {
 				document.getElementById('modalOk').style.display = 'block';

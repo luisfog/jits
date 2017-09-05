@@ -10,7 +10,7 @@
 		$rawKey = hash('ripemd160', $_POST['name'].microtime()).hash('ripemd160', $_POST['name'].microtime());
 		$rawKey = substr($rawKey, 0, $_POST['length']);
 		
-		header("HTTP/1.1 201 Created");
+		header("HTTP/1.1 200 OK");
 		echo $rawKey;
 		return;
 	}

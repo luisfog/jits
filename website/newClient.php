@@ -128,7 +128,6 @@
 						<p>Check name availability<span class="ok" id="nameAvailable">OK</span></p>
 						<p>Generate connection<span class="ok" id="generateConn">OK</span></p>
 						<p>Generate AES key<span class="ok" id="generateAES">OK</span></p>
-						<p>Generate AES iv<span class="ok" id="generateAESiv">OK</span></p>
 						<p>Register client<span class="ok" id="registerClient">OK</span></p>
 						<hr/>
 						<h5><b>Data</b></h5><hr/>
@@ -138,8 +137,6 @@
 						<p class="ok" id="connKey">OK<p>
 						<p>AES key:<p>
 						<p class="ok" id="aesKey">OK<p>
-						<p>AES iv:<p>
-						<p class="ok" id="aesIV">OK<p>
 					</div>
 				</div>
 				

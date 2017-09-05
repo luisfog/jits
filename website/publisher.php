@@ -1,6 +1,4 @@
 <?php
-	ini_set('display_errors', '0');
-	
 	if( isset($_GET['con']) ){
 		
 		include("./server/dbinfo.php");
@@ -12,7 +10,7 @@
 			return;
 		}
 		
-		$sql = "SELECT * FROM clients WHERE connection_key LIKE '".$_GET['con']."'";
+		$sql = "SELECT *, NOW() as now FROM clients WHERE connection_key LIKE '".$_GET['con']."'";
 		$result = $conn->query($sql);
 
 		if ($result->num_rows == 0) {
@@ -22,11 +20,24 @@
 		}
 		$client = $result->fetch_assoc();
 		
+		$ivDate = strtotime($client["date_last_iv"]);
+		$nowDate = strtotime($client["now"]);
+		if($client["date_last_iv"] == "" || round(abs($nowDate - $ivDate) / 60,2) > 5 ) {
+			header("HTTP/1.1 500 Internal Server Error");
+			echo "iv expired, please generate a new iv.";
+			return;
+		}
+		
 		$input = file_get_contents('php://input');
 		
 		$inputDec = fnDecrypt($input, $client["aes_key"], $client["aes_iv"]);
 		$inputDec = substr($inputDec, 0, strrpos($inputDec, "}")+1);
 		$jsonArray = json_decode($inputDec, true);
+		if($jsonArray === null) {
+			header("HTTP/1.1 500 Internal Server Error");
+			echo "Error decoding JSON.";
+			return;
+		}
 		
 		$createValues = "";
 		$insert = "";
@@ -52,6 +63,40 @@
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating client table.";
 				return;
+			}
+		}else{
+			$sql = "SHOW COLUMNS FROM  client_".$_GET['con'];
+			$result = $conn->query($sql);
+			$newColumns = "";
+			if ($result) {
+				$fields = Array();
+				while($entry = $result->fetch_assoc()) {
+					if($entry["Field"] != "id" && $entry["Field"] != "creation"){
+						$fields[] = $entry["Field"];
+					}
+				}
+				foreach ($jsonArray as $key => $value) {
+					$newField = true;
+					foreach ($fields as $field) {
+						if($field == $key){
+							$newField = false;
+							break;
+						}
+					}
+					if($newField){
+						$newColumns .= "ADD COLUMN {$key} FLOAT(15,7) NOT NULL,";
+					}
+				}
+				if($newColumns != ""){
+					$newColumns = substr($newColumns, 0, -1);
+					$sql = "ALTER TABLE client_".$_GET['con']." $newColumns;";
+					echo $sql;
+					if(!$conn->query($query)) {
+						header("HTTP/1.1 500 Internal Server Error");
+						echo "Error creating new columns.";
+						return;
+					}
+				}
 			}
 		}
 		
@@ -255,10 +300,19 @@
 			}
 		}
 		
+		//
+		$sql = "SELECT * FROM webUsers LIMIT 1";
+		$result = $conn->query($sql);
+		if ($result && $result->num_rows > 0) {
+			$lastRow = $result->fetch_assoc();
+			date_default_timezone_set($lastRow["timezoneset"]);
+		}
+		
 		$sql = "INSERT INTO client_".$_GET['con']." (creation, $insert)
-				VALUES (NOW(), $values)";
+				VALUES ('".date('Y-m-d H:i:s')."', $values)";
+				
 		if ($conn->query($sql) === TRUE) {
-			header("HTTP/1.1 201 Created");
+			header("HTTP/1.1 200 OK");
 			echo "Data saved successfully";
 			return;
 		} else {

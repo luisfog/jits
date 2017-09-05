@@ -19,6 +19,7 @@ function createWorld(){
 	var email_ui = document.getElementById("email").value;
 	var webPass = document.getElementById("webPass").value;
 	var webPassCon = document.getElementById("webPassCon").value;
+	var timezone = document.getElementById("timezone").value;
 	var serverI = document.getElementById("server").value;
 	var userI = document.getElementById("user").value;
 	var passI = document.getElementById("pass").value;
@@ -37,6 +38,10 @@ function createWorld(){
 	}
 	if(webPass != webPassCon){
 		alert("Confirmation password is not the same as password.");
+		return;
+	}
+	if(timezone == "selectTime"){
+		alert("Please choose a timezone.");
 		return;
 	}
 	if(serverI == ""){
@@ -64,7 +69,7 @@ function createDBinfo(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, database: databaseI, order: "dbinfo" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createDatabase").innerHTML = "...";
 				document.getElementById("createDatabase").style.visibility = "visible";
 				document.getElementById("createUser").innerHTML = "...";
@@ -86,7 +91,7 @@ function createDatabase(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "database" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createDatabase").style.visibility = "visible";
 				createUser(serverI, userI, passI);
 			},
@@ -103,7 +108,7 @@ function createUser(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "user"},
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createUser").style.visibility = "visible";
 				givePermissions(serverI, userI, passI);
 			},
@@ -120,7 +125,7 @@ function givePermissions(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "permissions" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("givePermissions").style.visibility = "visible";
 				createClients(serverI, userI, passI);
 			},
@@ -137,7 +142,7 @@ function createClients(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "clients" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createClients").style.visibility = "visible";
 				createViews(serverI, userI, passI);
 			},
@@ -154,7 +159,7 @@ function createViews(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "views" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createViews").style.visibility = "visible";
 				createAlarms(serverI, userI, passI);
 			},
@@ -171,7 +176,7 @@ function createAlarms(serverI, userI, passI){
 		url: "./server/init.php",
 		data: { server: serverI, user: userI, pass: passI, order: "alarms" },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createAlarms").style.visibility = "visible";
 				createWebUser(serverI, userI, passI);
 			},
@@ -184,15 +189,16 @@ function createAlarms(serverI, userI, passI){
 
 function createWebUser(serverI, userI, passI){	
 	var webUserI = document.getElementById("webUser").value;
-	var webPassI = document.getElementById("webPass").value;
 	var emailI = document.getElementById("email").value;
+	var webPassI = document.getElementById("webPass").value;
+	var timezoneI = document.getElementById("timezone").value;
 	
 	$.ajax({
 		method: "POST",
 		url: "./server/init.php",
-		data: { server: serverI, user: userI, pass: passI, order: "webUuser", webUser: webUserI, webPass: webPassI, email: emailI},
+		data: { server: serverI, user: userI, pass: passI, order: "webUuser", webUser: webUserI, webPass: webPassI, email: emailI, timezone: timezoneI},
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("createWebUser").style.visibility = "visible";
 				deleteInit(serverI, userI, passI);
 			},

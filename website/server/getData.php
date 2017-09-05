@@ -59,8 +59,6 @@
 			return;
 		}
 		
-		//echo $sql;
-		
 		$result = $conn->query($sql);
 		
 		if($result){

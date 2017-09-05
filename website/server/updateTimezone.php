@@ -6,9 +6,10 @@
 		return;
 	}
 	
-	if( isset($_POST['name'])){
+	if( isset($_POST['timezone']) ){
 		
-		$name = $_POST['name'];
+		$name = $_SESSION['name'];
+		$timezone = $_POST['timezone'];
 		
 		include("./dbinfo.php");
 
@@ -19,7 +20,7 @@
 			return;
 		}
 		
-		$sql = "DELETE FROM alarms WHERE name like'$name'";
+		$sql = "UPDATE webUsers SET timezoneset='$timezone' WHERE user LIKE '$name'";
 		
 		if ($conn->query($sql) === TRUE) {
 			$conn->close();
@@ -28,7 +29,7 @@
 		} else {
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Error deleting.";
+			echo "Error updating.";
 			return;
 		}
 	}

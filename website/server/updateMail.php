@@ -6,9 +6,9 @@
 		return;
 	}
 	
-	if( isset($_POST['name']) && isset($_POST['email']) ){
+	if( isset($_POST['email']) ){
 		
-		$name = $_POST['name'];
+		$name = $_SESSION['name'];
 		$email = $_POST['email'];
 		
 		include("./dbinfo.php");
@@ -29,7 +29,7 @@
 		} else {
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Error deliting.";
+			echo "Error updating.";
 			return;
 		}
 	}

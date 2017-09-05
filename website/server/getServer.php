@@ -11,7 +11,7 @@
 	$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"));
 	$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
 	
-	header("HTTP/1.1 201 Created");
+	header("HTTP/1.1 200 OK");
 	echo $actual_link;
 	return;
 ?>

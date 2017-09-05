@@ -34,7 +34,7 @@
 			}
 		}
 		
-		header("HTTP/1.1 201 Created");
+		header("HTTP/1.1 200 OK");
 		echo "View created successfully";
 		$conn->close();
 		return;

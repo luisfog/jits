@@ -6,13 +6,12 @@
 		return;
 	}
 	
-	if( isset($_POST['name']) && isset($_POST['aes']) && isset($_POST['type']) && isset($_POST['connection']) && isset($_POST['aes_key']) && isset($_POST['aes_iv']) ){
+	if( isset($_POST['name']) && isset($_POST['aes']) && isset($_POST['type']) && isset($_POST['connection']) && isset($_POST['aes_key']) ){
 		$name = $_POST["name"];
 		$aes = $_POST["aes"];
 		$type = $_POST["type"];
 		$connection = $_POST["connection"];
 		$aes_key = $_POST["aes_key"];
-		$aes_iv = $_POST["aes_iv"];
 
 		include("./dbinfo.php");
 
@@ -22,10 +21,10 @@
 			echo "Connection failed: " . $conn->connect_error;
 			return;
 		}
-		$sql = "INSERT INTO clients (creation, name, aes, type, connection_key, aes_key, aes_iv)
-				VALUES (NOW(), '$name', '$aes', '$type', '$connection', '$aes_key', '$aes_iv')";
+		$sql = "INSERT INTO clients (creation, name, aes, type, connection_key, aes_key)
+				VALUES (NOW(), '$name', '$aes', '$type', '$connection', '$aes_key')";
 		if ($conn->query($sql) === TRUE) {
-			header("HTTP/1.1 201 Created");
+			header("HTTP/1.1 200 OK");
 			echo "Client created successfully";
 			$conn->close();
 			return;

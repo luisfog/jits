@@ -28,7 +28,7 @@
 		} else {
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Error deliting.";
+			echo "Error deleting.";
 			return;
 		}
 	}

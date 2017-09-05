@@ -29,7 +29,7 @@ function getServer(){
 		method: "POST",
 		url: "./server/getServer.php",
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				connectionServer = response;
 				createConnection();
 			},
@@ -48,7 +48,7 @@ function createConnection(){
 		url: "./server/generator.php",
 		data: { name: nameI, length: 30 },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				connectionKey = response;
 				document.getElementById("generateConn").style.visibility = "visible";
 				createAes(nameI);
@@ -73,10 +73,10 @@ function createAes(nameI){
 		url: "./server/generator.php",
 		data: { name: nameI, length: lengthNumeber },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				aesKey = response;
 				document.getElementById("generateAES").style.visibility = "visible";
-				createIV(nameI, lengthI);
+				createClient(nameI, lengthI);
 			},
 			500: function (response) {
 				alert(response.responseText);
@@ -85,43 +85,24 @@ function createAes(nameI){
 	})
 }
 
-function createIV(nameI, lengthI){	
-	$.ajax({
-		method: "POST",
-		url: "./server/generatorIV.php",
-		statusCode: {
-			201: function (response) {
-				aesIV = response;
-				document.getElementById("generateAESiv").style.visibility = "visible";
-				createClient(nameI, lengthI, aesIV);
-			},
-			500: function (response) {
-				alert(response.responseText);
-			}
-		}
-	})
-}
-
-function createClient(nameI, lengthI, aesIV){	
+function createClient(nameI, lengthI){	
 	var typeI = document.getElementById("type").value;
 	
 	$.ajax({
 		method: "POST",
 		url: "./server/registerClient.php",
-		data: { name: nameI, aes: lengthI, type: typeI, connection: connectionKey, aes_key: aesKey, aes_iv: aesIV },
+		data: { name: nameI, aes: lengthI, type: typeI, connection: connectionKey, aes_key: aesKey },
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				document.getElementById("registerClient").style.visibility = "visible";
 				
 				document.getElementById("connServer").innerHTML = connectionServer;
 				document.getElementById("connKey").innerHTML = connectionKey;
 				document.getElementById("aesKey").innerHTML = aesKey;
-				document.getElementById("aesIV").innerHTML = aesIV;
 				
 				document.getElementById("connServer").style.visibility = "visible";
 				document.getElementById("connKey").style.visibility = "visible";
 				document.getElementById("aesKey").style.visibility = "visible";
-				document.getElementById("aesIV").style.visibility = "visible";
 				
 				updateClientList();
 			},

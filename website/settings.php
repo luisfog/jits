@@ -123,6 +123,19 @@
 	<?php
 		$sql = "SELECT * FROM webUsers LIMIT 1";
 		$result = $conn->query($sql);
+		
+		function formatOffset($offset) {
+			$hours = $offset / 3600;
+			$remainder = $offset % 3600;
+			$sign = $hours > 0 ? '+' : '-';
+			$hour = (int) abs($hours);
+			$minutes = (int) abs($remainder / 60);
+
+			if ($hour == 0 AND $minutes == 0) {
+				$sign = ' ';
+			}
+			return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
+		}
 
 		if ($result && $result->num_rows > 0) {
 			$lastRow = $result->fetch_assoc();
@@ -130,14 +143,36 @@
 			echo "<input id='webUser' type='text' value='".$lastRow["user"]."' style='margin: 10px 0 10px 0;color:#000' disabled />";
 			echo "<hr/>";
 			echo "<input id='email' type='text' value='".$lastRow["email"]."' style='margin: 10px 0 10px 0;' />";
-		}
 	?>
 						<button onclick="updateMail()">Update eMail</button>
+						<hr/>
+						<select id="timezone" style="margin: 10px 0 10px 0;" >
+	<?php
+			$utc = new DateTimeZone('UTC');
+			$dt = new DateTime('now', $utc);
+
+			foreach(DateTimeZone::listIdentifiers() as $tz) {
+				$current_tz = new DateTimeZone($tz);
+				$offset =  $current_tz->getOffset($dt);
+				$transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
+				$abbr = $transition[0]['abbr'];
+
+				if($lastRow["timezoneset"] == $tz)
+					echo '<option value="' .$tz. '" selected>' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+				else
+					echo '<option value="' .$tz. '">' .$tz. ' [' .$abbr. ' '. formatOffset($offset). ']</option>';
+			}
+	?>
+						</select>
+						<button onclick="updateTimezone()">Update timezone</button>
 						<hr/>
 						<input id="pass" type="password" placeholder="old password" style="margin: 10px 0 10px 0;" />
 						<input id="newPass" type="password" placeholder="new password" style="margin: 10px 0 10px 0;" />
 						<input id="newPassCon" type="password" placeholder="confirm new password" style="margin: 10px 0 10px 0;" />
 						<button onclick="updatePass()">Update Password</button>
+	<?php
+		}
+	?>
 					</div>
 				</div>
 			</div>

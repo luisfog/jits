@@ -6,9 +6,9 @@
 		return;
 	}
 	
-	if( isset($_POST['name']) && isset($_POST['oldPassword']) && isset($_POST['newPassword']) ){
+	if( isset($_POST['oldPassword']) && isset($_POST['newPassword']) ){
 		
-		$name = $_POST['name'];
+		$name = $_SESSION['name'];
 		$oldPassword = $_POST['oldPassword'];
 		$newPassword = $_POST['newPassword'];
 		
@@ -44,14 +44,14 @@
 			} else {
 				$conn->close();
 				header("HTTP/1.1 500 Internal Server Error");
-				echo "Error deliting.";
+				echo "Error updating.";
 				return;
 			}
 		}
 		
 		$conn->close();
 				header("HTTP/1.1 500 Internal Server Error");
-				echo "Error deliting.";
+				echo "Error updating.";
 				return;
 	}
 	
