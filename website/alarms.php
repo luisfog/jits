@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
-	<script type="text/javascript" src="js/createAlarm.js"></script>
+	<script type="text/javascript" src="js/alarm.js"></script>
 
   </head>
   <body>
@@ -63,8 +63,8 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
-				$clientOptions .= "<option value='".$row["connection_key"]."'>".$row["name"]."</option>";
+				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
+				$clientOptions .= "<option value='".$row["connection_key"]."'>".base64_decode($row["name"])."</option>";
 			}
 		}
 	?>
@@ -79,7 +79,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>

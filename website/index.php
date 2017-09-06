@@ -87,9 +87,9 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
 				$clientsKeys[] = $row["connection_key"];
-				$clientsName[] = $row["name"];
+				$clientsName[] = base64_decode($row["name"]);
 			}
 		}
 	?>
@@ -104,7 +104,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
 				$views[] = $row["name"];
 			}
 		}
@@ -184,7 +184,7 @@
 			}
 			echo "<div class='col-xl-2 col-lg-3 col-md-4 col-sm-4 col-4'>";
 			echo "<div class='thumbnail'><div class='caption'>";
-			echo "<h3>$view</h3>";
+			echo "<h3>".base64_decode($view)."</h3>";
 				
 			$j = 0;
 			$data = false;
@@ -204,7 +204,7 @@
 								if($data == false)
 									echo "<script>dataArr[$i] = [];</script>";
 								
-								echo "<script>dataArr[$i].push({value:".round(($lastRow[$value[$j]]*100/$entry["value"]),2).", name:'".$clientsNameView[$j]."::".$value[$j]."'});</script>";
+								echo "<script>dataArr[$i].push({value:".round(($lastRow[$value[$j]]*100/$entry["value"]),2).", name:'".base64_decode($clientsNameView[$j])."::".base64_decode($value[$j])."'});</script>";
 								$data = true;
 							}
 						}
@@ -276,7 +276,7 @@
 								if($data == false)
 									echo "<script>dataArr[$i] = [];</script>";
 								
-								echo "<script>dataArr[$i].push({value:".round(($valuesNumbers[$value]*100/$entry[$value]),2).", name:'$value'});</script>";
+								echo "<script>dataArr[$i].push({value:".round(($valuesNumbers[$value]*100/$entry[$value]),2).", name:'".base64_decode($value)."'});</script>";
 								$data = true;
 							}else{
 								break;

@@ -16,6 +16,7 @@ function deleteAlarm(alarmName){
 		statusCode: {
 			200: function (response) {
 				updateAlarmsList();
+				document.getElementById("modalDelete").style.display = "none";
 			},
 			500: function (response) {
 				alert("The view could not be deleted, please try again later.");
@@ -80,7 +81,7 @@ function createAlarm(name_ui){
 				value: value_ui, condition: condition_ui, target: target_ui,
 				timeExecution: timeExecution_ui},
 		statusCode: {
-			201: function (response) {
+			200: function (response) {
 				updateAlarmsList();
 			},
 			500: function (response) {

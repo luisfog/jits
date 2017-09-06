@@ -7,7 +7,7 @@
 	}
 	
 	if( isset($_POST['name']) && isset($_POST['aes']) && isset($_POST['type']) && isset($_POST['connection']) && isset($_POST['aes_key']) ){
-		$name = $_POST["name"];
+		$name = str_replace('=', '', base64_encode($_POST["name"]));
 		$aes = $_POST["aes"];
 		$type = $_POST["type"];
 		$connection = $_POST["connection"];

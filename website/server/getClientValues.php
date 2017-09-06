@@ -30,7 +30,7 @@
 		
 		foreach ($lastRow as $key => $value) {
 			if($key <> "id" && $key <> "creation")
-				$rows[] = $key;
+				$rows[] = base64_decode($key);
 		}
 		
 		header("HTTP/1.1 200 OK");

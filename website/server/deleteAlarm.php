@@ -8,7 +8,7 @@
 	
 	if( isset($_POST['name'])){
 		
-		$name = $_POST['name'];
+		$name = str_replace('=', '', base64_encode($_POST["name"]));
 		
 		include("./dbinfo.php");
 

@@ -23,7 +23,7 @@
 
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			$arr[$i++]["name"] = $row["name"];
+			$arr[$i++]["name"] = base64_decode($row["name"]);
 		}
 	}
 	

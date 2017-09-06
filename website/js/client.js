@@ -158,7 +158,7 @@ function getData(){
 					}
 				}
 				
-				var valuesArr = values.split(", ");
+				var valuesArr = valuesBase64.split(", ");
 				
 				var seriesArr = [];
 				

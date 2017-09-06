@@ -9,10 +9,10 @@
 	if( isset($_POST['name']) && isset($_POST['connectionKey']) && isset($_POST['clientName']) && isset($_POST['value'])
 		&& isset($_POST['condition']) && isset($_POST['target']) && isset($_POST['timeExecution'])){
 			
-		$name = $_POST["name"];
+		$name = str_replace('=', '', base64_encode($_POST["name"]));
 		$connectionKey = $_POST["connectionKey"];
-		$clientName = $_POST["clientName"];
-		$value = $_POST["value"];
+		$clientName = str_replace('=', '', base64_encode($_POST["clientName"]));
+		$value = str_replace('=', '', base64_encode($_POST["value"]));
 		$condition = $_POST["condition"];
 		$target = $_POST["target"];
 		$timeExecution = $_POST["timeExecution"];

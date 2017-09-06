@@ -7,7 +7,7 @@
 	}
 	
 	if( isset($_POST['name']) && isset($_POST['list'])){
-		$name = $_POST["name"];
+		$name = str_replace('=', '', base64_encode($_POST["name"]));
 		$list = $_POST["list"];
 
 		include("./dbinfo.php");
@@ -22,6 +22,10 @@
 		$arr = json_decode($list);
 		for($i = 0; $i < count($arr); $i++){
 			$obj = (Array)$arr[$i];
+			
+			$obj["clientName"] = str_replace('=', '', base64_encode($obj["clientName"]));
+			$obj["value"] = str_replace('=', '', base64_encode($obj["value"]));
+			$obj["columnName"] = str_replace('=', '', base64_encode($obj["columnName"]));
 			
 			$sql = "INSERT INTO views (name, connection_key, client_name, value, column_name)".
 				"VALUES ('$name', '".$obj["connectionKey"]."', '".$obj["clientName"]."', '".$obj["value"]."', '".$obj["columnName"]."')";

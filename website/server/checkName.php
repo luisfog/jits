@@ -9,6 +9,8 @@
 	if(isset($_POST['name']) && isset($_POST['table'])){
 		
 		include("./dbinfo.php");
+		
+		$name = str_replace('=', '', base64_encode($_POST["name"]));
 
 		$conn = new mysqli($databaseHost, $user, $pass, $database);
 		if ($conn->connect_error) {
@@ -17,7 +19,7 @@
 			return;
 		}
 		
-		$sql = "SELECT * FROM ".$_POST['table']." WHERE name LIKE '".$_POST['name']."'";
+		$sql = "SELECT * FROM ".$_POST['table']." WHERE name LIKE '".$name."'";
 		$result = $conn->query($sql);
 
 		if ($result->num_rows > 0) {

@@ -64,7 +64,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>
@@ -79,7 +79,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>
@@ -136,12 +136,11 @@
 			$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
 			
-			echo $client["name"]."</b></h2></div>";
+			echo base64_decode($client["name"])."</b></h2></div>";
 			echo "<div class='col-xl-6 col-lg-6 col-md-6'>";
 			echo "<p><b>Server:</b> ".$actual_link."</p>";
 			echo "<p><b>Connection key:</b> ".$client["connection_key"]."</p>";
 			echo "<p><b>AES key:</b> ".$client["aes_key"]."</p>";
-			echo "<p><b>AES iv:</b> ".$client["aes_iv"]."</p>";
 			echo "<br/>";
 			echo "</div><div class='col-xl-6 col-lg-6 col-md-6'>";
 		}
@@ -162,15 +161,21 @@
 			echo "<p><b>Last push:</b> ".$lastRow['creation']."</p>";
 			
 			$values = "";
+			$valuesBase64 = "";
 			foreach ($lastRow as $key => $value) {
-				if($key <> "id" && $key <> "creation")
+				if($key <> "id" && $key <> "creation"){
 					$values .= "{$key}, ";
+					$key = base64_decode($key);
+					$valuesBase64 .= "{$key}, ";
+				}
 			}
 			$values = substr($values, 0, -2);
+			$valuesBase64 = substr($valuesBase64, 0, -2);
 			
 			echo "<a onclick='document.getElementById(\"modalDelete\").style.display = \"block\";' title='Delete' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
-			echo "<p><b>Values:</b> ".$values."</p>";
+			echo "<p><b>Values:</b> ".$valuesBase64."</p>";
 	
+			echo "<script>var valuesBase64 = '".$valuesBase64."';</script>";
 			echo "<script>var values = '".$values."';</script>";
 			echo "<script>var clientName = '".$client["name"]."';</script>";
 			echo "<script>window.onload = function(){";

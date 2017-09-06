@@ -64,7 +64,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>
@@ -79,7 +79,7 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".$row["name"]."</a></li>";
+				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>
@@ -133,7 +133,9 @@
 		$connectionKeys = array();
 		$clients = array();
 		$valuesName = array();
+		$columnsNameArrBase64 = array();
 		$columnsNameArr = array();
+		$valuesBase64 = "";
 		$values = "";
 		$totalPushes = 0;
 		$i = 0;
@@ -144,11 +146,12 @@
 				$connectionKeys[$i] = $row["connection_key"];
 				$clients[$i] = $row["client_name"];
 				$valuesName[$i] = $row["value"];
-				$columnsNameArr[$i++] = $row["column_name"];
+				$columnsNameArr[$i] = $row["column_name"];
+				$columnsNameArrBase64[$i++] = base64_decode($row["column_name"]);
 			}
 		}
 		
-		echo $name."</b></h2></div>";
+		echo base64_decode($name)."</b></h2></div>";
 		echo "<div class='col-xl-6 col-lg-6 col-md-6'>";
 		
 		for($j = 0; $j<$i; $j++){
@@ -160,20 +163,22 @@
 				$totalPushes += (int)$numberRows["num"];
 			}
 			
+			$valuesBase64 .= base64_decode($clients[$j])."::".base64_decode($valuesName[$j])." (".base64_decode($columnsNameArr[$j])."), ";
 			$values .= $clients[$j]."::".$valuesName[$j]." (".$columnsNameArr[$j]."), ";
 		}
 		$values = substr($values, 0, -2);
+		$valuesBase64 = substr($valuesBase64, 0, -2);
 		
 		echo "<p><b>Total pushes:</b> ".$totalPushes."</p>";
 		echo "<a onclick='document.getElementById(\"modalDelete\").style.display = \"block\";' title='Delete' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
-		echo "<p><b>Values:</b> ".$values."</p>";
+		echo "<p><b>Values:</b> ".$valuesBase64."</p>";
 		
 		if ($totalPushes > 0) {
 			echo "<script>var connectionKeysList = '".implode(",", $connectionKeys)."';</script>";
-			echo "<script>var columnsNamesList = '".implode(",", $columnsNameArr)."';</script>";
+			echo "<script>var columnsNamesList = '".implode(",", $columnsNameArrBase64)."';</script>";
 			echo "<script>var valuesList = '".implode(",", $valuesName)."';</script>";
 			//echo "<script>var valuesNamesList = '$values';</script>";
-			echo "<script>var valuesNamesList = '$columnsName';</script>";
+			//echo "<script>var valuesNamesList = '$columnsName';</script>";
 			echo "<script>var viewName = '$name';</script>";
 			echo "<script>window.onload = function(){";
 			echo "		initChart();";

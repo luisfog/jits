@@ -57,24 +57,18 @@
 			return;
 		}
 		
-		$clientsKeys = array();
-		$clientsName = array();
-		$views = array();
-		
 		$sql = "SELECT * FROM clients ORDER BY name";
 		$result = $conn->query($sql);
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".$row["name"]."</a></li>";
-				$clientsKeys[] = $row["connection_key"];
-				$clientsName[] = $row["name"];
+				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
 			}
 		}
 	?>
 								</ul>
 							</li>
-							<li class="dropdown">
+							<li class="dropdown active">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
 								<ul class="dropdown-menu" id="viewList">
 	<?php
@@ -83,8 +77,8 @@
 
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".$row["name"]."</a></li>";
-				$views[] = $row["name"];
+				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
+				
 			}
 		}
 	?>

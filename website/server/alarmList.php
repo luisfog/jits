@@ -1,5 +1,5 @@
 <?php
-	ini_set('display_errors', '0');
+	//ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ../login.html' );
@@ -23,9 +23,9 @@
 
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			$arr[$i]["name"] = $row["name"];
-			$arr[$i]["client_name"] = $row["client_name"];
-			$arr[$i]["value"] = $row["value"];
+			$arr[$i]["name"] = base64_decode($row["name"]);
+			$arr[$i]["client_name"] = base64_decode($row["client_name"]);
+			$arr[$i]["value"] = base64_decode($row["value"]);
 			
 			switch($row["cond"]){
 				case "1":

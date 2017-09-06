@@ -43,6 +43,7 @@
 		$insert = "";
 		$values = "";
 		foreach ($jsonArray as $key => $value) {
+			$key = str_replace('=', '', base64_encode($key));
 			$createValues .= "{$key} FLOAT(15,7) NOT NULL,";
 			$insert .= "{$key},";
 			$values .= "'{$value}',";
@@ -76,6 +77,7 @@
 					}
 				}
 				foreach ($jsonArray as $key => $value) {
+					$key = str_replace('=', '', base64_encode($key));
 					$newField = true;
 					foreach ($fields as $field) {
 						if($field == $key){
@@ -106,6 +108,7 @@
 		if ($result) {
 			while($entry = $result->fetch_assoc()) {
 				foreach ($jsonArray as $key => $value) {
+					$key = str_replace('=', '', base64_encode($key));
 					if($key == $entry["value"]){
 						switch($entry["cond"]){
 							case "1":
@@ -116,9 +119,9 @@
 													" WHERE ".$entry["value"]." == ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is equal ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is equal ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -131,9 +134,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." == ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was equal than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was equal than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}
@@ -147,9 +150,9 @@
 													" WHERE ".$entry["value"]." != ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is different than ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is different than ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -162,9 +165,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." != ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was different than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was different than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}
@@ -178,9 +181,9 @@
 													" WHERE ".$entry["value"]." < ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is less than ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is less than ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -193,9 +196,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." < ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was less than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}
@@ -209,9 +212,9 @@
 													" WHERE ".$entry["value"]." > ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is greater than ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is greater than ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -224,9 +227,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." > ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was greater than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}
@@ -240,9 +243,9 @@
 													" WHERE ".$entry["value"]." <= ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is less or equal than ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is less or equal than ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -255,9 +258,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." <= ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was less or equal than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was less or equal than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}
@@ -271,9 +274,9 @@
 													" WHERE ".$entry["value"]." >= ".$entry["target"];
 										$resultLast = $conn->query($sqlLast);
 										if ($resultLast && $resultLast->num_rows == 0) {
-											$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-											$msg .= "'".$entry["value"]."' is greater or equal than ".$entry["target"];
-											sendMail($conn, $entry["name"], $msg);
+											$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+											$msg .= "'".base64_decode($entry["value"])."' is greater or equal than ".$entry["target"];
+											sendMail($conn, base64_decode($entry["name"]), $msg);
 										}
 									}else{
 										$sqlTime = "SELECT ".$entry["value"]." FROM client_".$_GET['con']." WHERE".
@@ -286,9 +289,9 @@
 														" ORDER BY creation DESC LIMIT 1) as c WHERE ".$entry["value"]." >= ".$entry["target"];
 											$resultLast = $conn->query($sqlLast);
 											if ($resultLast && $resultLast->num_rows == 0) {
-												$msg = "Was detected an alarm in client '".$entry["client_name"]."'.\n\n";
-												$msg .= "In the last ".$entry["time_target"]." minutes, '".$entry["value"]."' was greater or equal than ".$entry["target"];
-												sendMail($conn, $entry["name"], $msg);
+												$msg = "Was detected an alarm in client '".base64_decode($entry["client_name"])."'.\n\n";
+												$msg .= "In the last ".$entry["time_target"]." minutes, '".base64_decode($entry["value"])."' was greater or equal than ".$entry["target"];
+												sendMail($conn, base64_decode($entry["name"]), $msg);
 											}
 										}
 									}

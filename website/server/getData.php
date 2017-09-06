@@ -1,5 +1,5 @@
 <?php
-	ini_set('display_errors', '0');
+	//ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ../login.html' );
@@ -16,7 +16,7 @@
 
 		$columns = "";
 		for($i = 0; $i<sizeof($columnsArr); $i++){
-			$columns .= "ROUND(".$columnsArr[$i].",2) as ".$columnsArr[$i].",";
+			$columns .= "ROUND(".$columnsArr[$i].",2) as '".base64_decode($columnsArr[$i])."',";
 		}
 		$columns = substr($columns, 0, -1);
 		
@@ -60,10 +60,19 @@
 		}
 		
 		$result = $conn->query($sql);
+		//echo $sql;
 		
 		if($result){
 			while($entry = $result->fetch_assoc()) {
 				$rows[] = $entry;
+				
+				/*foreach ($entry as $key => $value) {
+					if($key <> "creation")
+						$rows[] = $key => $value;
+					else
+						$rows[$i] = "\"".$key."\" : \"".$value."\"";
+				}
+				$i++;*/
 			}
 		}
 		
