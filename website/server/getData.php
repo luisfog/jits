@@ -1,5 +1,5 @@
 <?php
-	//ini_set('display_errors', '0');
+	ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ../login.html' );
@@ -24,6 +24,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("getData.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -55,24 +57,17 @@
 				" where creation > '$dataLong'";
 		}else{
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
+			echo "'dataLong' parameter has a invalid value.";
+			include("./server/logs.php");
+			insertToLog("getData.php", "'dataLong' parameter has a invalid value.");
 			return;
 		}
 		
 		$result = $conn->query($sql);
-		//echo $sql;
 		
 		if($result){
 			while($entry = $result->fetch_assoc()) {
 				$rows[] = $entry;
-				
-				/*foreach ($entry as $key => $value) {
-					if($key <> "creation")
-						$rows[] = $key => $value;
-					else
-						$rows[$i] = "\"".$key."\" : \"".$value."\"";
-				}
-				$i++;*/
 			}
 		}
 		
@@ -87,5 +82,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("getData.php", "Wrong GET request parameters.");
 	return;
 ?>

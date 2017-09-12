@@ -67,7 +67,7 @@
 	?>
 								</ul>
 							</li>
-							<li class="dropdown active">
+							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
 								<ul class="dropdown-menu" id="viewList">
 	<?php

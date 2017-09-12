@@ -7,6 +7,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("generatorIV.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -16,6 +18,8 @@
 		if ($result->num_rows == 0) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "No known client.";
+			include("./server/logs.php");
+			insertToLog("generatorIV.php", "Connection key is invalid: ".$_GET['con']);
 			return;
 		}
 		
@@ -38,11 +42,14 @@
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error updating.";
+			include("./server/logs.php");
+			insertToLog("generatorIV.php", "Error updating: " . $conn->error);
 			return;
 		}
-		
-		
-		
-		
 	}
+	header("HTTP/1.1 500 Internal Server Error");
+	echo "Unknown order.";
+	include("./server/logs.php");
+	insertToLog("generatorIV.php", "Wrong GET request parameters.");
+	return;
 ?>

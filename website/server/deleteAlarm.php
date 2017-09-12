@@ -16,6 +16,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("deleteAlarm.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -29,11 +31,15 @@
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error deleting.";
+			include("./server/logs.php");
+			insertToLog("deleteAlarm.php", "Error deleting: " . $conn->error);
 			return;
 		}
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("deleteAlarm.php", "Wrong GET request parameters.");
 	return;
 ?>

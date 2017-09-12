@@ -27,6 +27,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("getViewData.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -62,7 +64,9 @@
 					" where creation > '$dataLong'";
 			}else{
 				header("HTTP/1.1 500 Internal Server Error");
-				echo "Connection failed: " . $conn->connect_error;
+				echo "'dataLong' parameter has a invalid value.";
+				include("./server/logs.php");
+				insertToLog("getViewData.php", "'dataLong' parameter has a invalid value.");
 				return;
 			};
 			
@@ -89,5 +93,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("getViewData.php", "Wrong GET request parameters.");
 	return;
 ?>

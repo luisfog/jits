@@ -1,5 +1,5 @@
 <?php
-	//ini_set('display_errors', '0');
+	ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ../login.html' );
@@ -12,6 +12,8 @@
 	if ($conn->connect_error) {
 		header("HTTP/1.1 500 Internal Server Error");
 		echo "Connection failed: " . $conn->connect_error;
+		include("./server/logs.php");
+		insertToLog("alarmList.php", "Connection failed: " . $conn->connect_error);
 		return;
 	}
 	

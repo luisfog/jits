@@ -19,6 +19,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("registerClient.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		$sql = "INSERT INTO clients (creation, name, aes, type, connection_key, aes_key)
@@ -31,11 +33,15 @@
 		} else {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error creating client: " . $conn->error;
+			include("./server/logs.php");
+			insertToLog("registerClient.php", "Error creating client: " . $conn->error);
 			$conn->close();
 			return;
 		}
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
+	include("./server/logs.php");
+	insertToLog("registerClient.php", "Wrong GET request parameters.");
 	return;
 ?>

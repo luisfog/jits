@@ -16,6 +16,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("checkName.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -24,7 +26,9 @@
 
 		if ($result->num_rows > 0) {
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Unknown order.";
+			echo "Name already taken.";
+			include("./server/logs.php");
+			insertToLog("checkName.php", "Name already taken.");
 			$conn->close();
 			return;
 		}else{
@@ -37,5 +41,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("checkName.php", "Wrong GET request parameters.");
 	return;
 ?>

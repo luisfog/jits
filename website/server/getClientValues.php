@@ -16,6 +16,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("getClientValues.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -44,5 +46,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("getClientValues.php", "Wrong GET request parameters.");
 	return;
 ?>

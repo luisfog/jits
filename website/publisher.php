@@ -7,6 +7,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("publisher.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -16,6 +18,8 @@
 		if ($result->num_rows == 0) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "No known client.";
+			include("./server/logs.php");
+			insertToLog("publisher.php", "The connection key is not in the database.");
 			return;
 		}
 		$client = $result->fetch_assoc();
@@ -25,6 +29,8 @@
 		if($client["date_last_iv"] == "" || round(abs($nowDate - $ivDate) / 60,2) > 5 ) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "iv expired, please generate a new iv.";
+			include("./server/logs.php");
+			insertToLog("publisher.php", "The iv expired, please generate a new iv");
 			return;
 		}
 		
@@ -36,6 +42,8 @@
 		if($jsonArray === null) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error decoding JSON.";
+			include("./server/logs.php");
+			insertToLog("publisher.php", "Error decoding JSON.");
 			return;
 		}
 		
@@ -63,6 +71,8 @@
 			if ($conn->query($sql) !== TRUE) {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating client table.";
+				include("./server/logs.php");
+				insertToLog("publisher.php", "Error creating client table: " . $conn->error);
 				return;
 			}
 		}else{
@@ -96,6 +106,8 @@
 					if(!$conn->query($query)) {
 						header("HTTP/1.1 500 Internal Server Error");
 						echo "Error creating new columns.";
+						include("./server/logs.php");
+						insertToLog("publisher.php", "Error creating new columns: " . $conn->error);
 						return;
 					}
 				}
@@ -320,13 +332,17 @@
 			return;
 		} else {
 			header("HTTP/1.1 500 Internal Server Error");
-			echo "Error saving data, invalid json.";
+			echo "Error inserting data: " . $conn->error;
+			include("./server/logs.php");
+			insertToLog("publisher.php", "Error inserting data in the table client_".$_GET['con'].": " . $conn->error);
 			return;
 		}
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
+	include("./server/logs.php");
+	insertToLog("publisher.php", "The get parameters are not right, you need to send the connection key.");
 	return;
 	
 	function fnDecrypt($input, $aesKey, $aesIV)

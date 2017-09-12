@@ -17,5 +17,7 @@
 
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("generator.php", "Wrong GET request parameters.");
 	return;
 ?>

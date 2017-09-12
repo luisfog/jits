@@ -110,16 +110,6 @@
 				</nav>
 				
 				<br/><br/><br/>
-								
-				<div class="alert alert-success alert-dismissable" id="errorDIV" style="display: none;">
-					 
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-						×
-					</button>
-					<h4>
-						Alert!
-					</h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a href="#" class="alert-link">alert link</a>
-				</div>
 				
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
@@ -258,10 +248,10 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
-					<h3 class="modal-title">Delete View</h3>
+					<h3 class="modal-title">Delete Client</h3>
 				</div>
 				<div class="modal-body" id="modalCloseText" >
-					<p>Are you sure you want to delete this View?</p>
+					<p>Are you sure you want to delete this Client?</p>
 				</div>
 				<div class="modal-footer">
 					<button id="modalYesButton" type="button" class="btn btn-export" onclick="deleteClient()" >Yes</button>

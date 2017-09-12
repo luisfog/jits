@@ -8,7 +8,7 @@
 	
 	if( isset($_POST['name'])){
 		
-		$name = str_replace('=', '', base64_encode($_POST["name"]));
+		$name = $_POST["name"];
 		
 		include("./dbinfo.php");
 
@@ -16,6 +16,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("deleteView.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -29,11 +31,15 @@
 			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error deleting.";
+			include("./server/logs.php");
+			insertToLog("deleteView.php", "Error deleting: " . $conn->error);
 			return;
 		}
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("deleteView.php", "Wrong GET request parameters.");
 	return;
 ?>

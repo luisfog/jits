@@ -110,16 +110,6 @@
 				</nav>
 				
 				<br/><br/><br/>
-								
-				<div class="alert alert-success alert-dismissable" id="errorDIV" style="display: none;">
-					 
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-						×
-					</button>
-					<h4>
-						Alert!
-					</h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a href="#" class="alert-link">alert link</a>
-				</div>
 				
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">

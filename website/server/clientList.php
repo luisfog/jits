@@ -12,6 +12,8 @@
 	if ($conn->connect_error) {
 		header("HTTP/1.1 500 Internal Server Error");
 		echo "Connection failed: " . $conn->connect_error;
+		include("./server/logs.php");
+		insertToLog("clientList.php", "Connection failed: " . $conn->connect_error);
 		return;
 	}
 	

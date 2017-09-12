@@ -70,6 +70,7 @@ var options = 	{
 					},
 					yAxis: {
 						type: 'value',
+						min: 'dataMin'
 					}
 				};
 

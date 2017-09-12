@@ -18,6 +18,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("updatePassword.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -27,12 +29,7 @@
 		if ($result->num_rows > 0) {
 			$row = $result->fetch_assoc();
 			$hash = $row["pass"];
-			
-			/*if (!password_verify($oldPassword, $hash)) {
-				header("HTTP/1.1 403 Forbidden");
-				return;
-			}*/
-					
+				
 			$hash = password_hash($newPassword, PASSWORD_DEFAULT);
 			$sql = "UPDATE webUsers SET pass='$hash' WHERE user LIKE '$name'";
 			echo $sql;
@@ -45,17 +42,23 @@
 				$conn->close();
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error updating.";
+				include("./server/logs.php");
+				insertToLog("updatePassword.php", "Error updating: " . $conn->error);
 				return;
 			}
 		}
 		
 		$conn->close();
-				header("HTTP/1.1 500 Internal Server Error");
-				echo "Error updating.";
-				return;
+		header("HTTP/1.1 500 Internal Server Error");
+		echo "Error updating.";
+		include("./server/logs.php");
+		insertToLog("updatePassword.php", "No user with that name");
+		return;
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
+	include("./server/logs.php");
+	insertToLog("updatePassword.php", "Wrong GET request parameters.");
 	return;
 ?>

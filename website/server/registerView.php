@@ -16,6 +16,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("registerView.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -33,6 +35,8 @@
 			if ($conn->query($sql) !== TRUE) {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating view: " . $conn->error;
+				include("./server/logs.php");
+				insertToLog("registerView.php", "Error creating alarm: " . $conn->error);
 				$conn->close();
 				return;
 			}
@@ -45,5 +49,7 @@
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
+	include("./server/logs.php");
+	insertToLog("registerView.php", "Wrong GET request parameters.");
 	return;
 ?>

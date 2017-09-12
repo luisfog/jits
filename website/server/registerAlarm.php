@@ -26,6 +26,8 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
+			include("./server/logs.php");
+			insertToLog("registerAlarm.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		$sql = "INSERT INTO alarms (name, connection_key, client_name, value, cond, target, time_target)
@@ -39,11 +41,15 @@
 		} else {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error creating alarm: " . $conn->error;
+			include("./server/logs.php");
+			insertToLog("registerAlarm.php", "Error creating alarm: " . $conn->error);
 			$conn->close();
 			return;
 		}
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
+	include("./server/logs.php");
+	insertToLog("registerAlarm.php", "Wrong GET request parameters.");
 	return;
 ?>
