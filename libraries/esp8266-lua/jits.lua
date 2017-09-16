@@ -1,5 +1,6 @@
 local jits = {}
 
+
 function jits.fromArrayToJSON (names, values)
     if #names ~= #values then
         return nil
@@ -7,7 +8,7 @@ function jits.fromArrayToJSON (names, values)
 
     local res = ""
     for i = 1, #names do
-      res = res .. "\"" .. names[i] .. "\": \"" .. values[i] .. "\","
+      res = res .. "\"" .. names[i] .. "\" : \"" .. values[i] .. "\","
     end
     
     return "{" .. string.sub(res, 0, -2) .. "}"
@@ -18,57 +19,44 @@ function jits.encryptJSON (json, aesKey, aesIV)
             aesKey,json,encoder.fromBase64(aesIV)))
 end
 
-function jits.createURL(server, connectionKey)
-    return server .. "?con=" .. connectionKey
+function jits.createPublisherURL(server, connectionKey)
+    return server .. "publisher.php?con=" .. connectionKey
 end
 
-function jits.sendData (server, connectionKey, encryptedJSON)
-    http.post(jits.createURL(server, connectionKey),
+function jits.createIvURL(server, connectionKey)
+    return server .. "generatorIV.php?con=" .. connectionKey
+end
+
+function jits.sendDataEncript (server, connectionKey, encryptedJSON)
+    http.post(jits.createPublisherURL(server, connectionKey),
             "Content-Type: text/plain"..
             "Content-Length: " .. string.len(encryptedJSON),
             encryptedJSON,
             function(code, data)
                 if (code < 0) then
-                    print("HTTP request failed")
+                    print("jits: ERROR")
                 else
-                    print(code, data)
+                    print("jits: Data Sent")
                 end
             end)
 end
 
-function jits.sendData (server, connectionKey, json, aesKey, aesIV)
-    local encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
-    http.post(jits.createURL(server, connectionKey),
-            "Content-Type: text/plain"..
-            "Content-Length: " .. string.len(encryptedJSON),
-            encryptedJSON,
-            function(code, data)
+function jits.sendDataJson (server, connectionKey, json, aesKey)
+    http.get(jits.createIvURL(server, connectionKey),
+            nil,
+            function(code, aesIV)
                 if (code < 0) then
-                    print("HTTP request failed")
+                    print("jits: ERROR")
                 else
-                    print(code, data)
+                    local encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
+                    jits.sendDataEncript (server, connectionKey, encryptedJSON)
                 end
             end)
 end
 
-function jits.sendData (server, connectionKey, names, values, aesKey, aesIV)
+function jits.sendDataArray (server, connectionKey, names, values, aesKey)
     local json = jits.fromArrayToJSON (names, values)
-    if json == nil then
-        print ("Error creating json")
-        return
-    end
-    local encryptedJSON = jits.encryptJSON (json, aesKey, aesIV)
-    http.post(jits.createURL(server, connectionKey),
-            "Content-Type: text/plain"..
-            "Content-Length: " .. string.len(encryptedJSON),
-            encryptedJSON,
-            function(code, data)
-                if (code < 0) then
-                    print("HTTP request failed")
-                else
-                    print(code, data)
-                end
-            end)
+    jits.sendDataJson (server, connectionKey, json, aesKey)
 end
 
 return jits

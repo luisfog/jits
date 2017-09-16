@@ -11,7 +11,7 @@
 		unset($lines[$last]);
 		
 		$fp = fopen('jits_logs', 'w'); 
-		fwrite($fp, implode('', $lines)."\$errors[] = \"".date("Y-m-d H:i:s")." - $file.php - $error\";\n?>"); 
+		fwrite($fp, implode('', $lines)."\$errors[] = \"".date("Y-m-d H:i:s")." - $file - $error\";\n?>"); 
 		fclose($fp); 
 	}
 	
