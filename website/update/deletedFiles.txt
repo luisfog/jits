@@ -1,1 +1,1 @@
-./fonts/glyphicons-halflings-regular.eot
+./fonts/

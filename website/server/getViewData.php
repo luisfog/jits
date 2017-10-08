@@ -15,7 +15,6 @@
 	}
 
 	if( isset($_POST['name']) && isset($_POST['connectionKeys']) && isset($_POST['columnsNames']) && isset($_POST['values']) && isset($_POST['dataLong'])){
-		include("./dbinfo.php");
 		
 		$name = $_POST['name'];
 		$connectionKeys = explode(",", $_POST['connectionKeys']);
@@ -23,14 +22,8 @@
 		$values = explode(",", $_POST['values']);
 		$dataLong = $_POST['dataLong'];
 		
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("getViewData.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 		
 		$rows = array();
 		$rowIndex = 0;

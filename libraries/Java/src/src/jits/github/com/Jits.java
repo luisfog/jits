@@ -1,4 +1,4 @@
-package tester.jits.github.com;
+package jits.github.com;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,12 +38,32 @@ public class Jits {
 	private String connectionKey;
 	private String aesKey;
 	
+	/**
+	 * JITS
+	 * 
+	 * @param server
+	 *  - A String with JITS URL (this can be seen in the client information)
+	 * @param connectionKey
+	 *  - A String with the connection key of your client
+	 * @param aesKey
+	 *  - A String with the aes key used in your client
+	 */
 	public Jits(String server, String connectionKey, String aesKey){
 		this.server = server;
 		this.connectionKey = connectionKey;
 		this.aesKey = aesKey;
 	}
 	
+	/**
+	 * Creates a json String from two arrays.
+	 * 
+	 * @param names
+	 *  - An array of Strings that specifies the json attributes
+	 * @param values
+	 *  - An array of floats that indicates the json values
+	 * @return
+	 * 	A json String created using the input arrays (one for the attributes and other for the values)
+	 */
 	private String fromArrayToJSON(String[] names, float[] values){
 		if(names.length != values.length)
 			return null;
@@ -56,6 +76,16 @@ public class Jits {
 		
 	}
 	
+	/**
+	 * Creates a json String from two lists.
+	 * 
+	 * @param names
+	 *  - A List of Strings that specifies the json attributes
+	 * @param values
+	 *  - A List of floats that indicates the json values
+	 * @return
+	 *  A json String created using the input lists (one for the attributes and other for the values)
+	 */
 	private String fromListToJSON(List<String> names, List<Float> values){
 		if(names.size() != values.size())
 			return null;
@@ -68,6 +98,16 @@ public class Jits {
 		
 	}
 	
+	/**
+	 * Encrypts a json String
+	 * 
+	 * @param json
+	 *  - A String with the json to be encrypt
+	 * @param aesIV
+	 *  - A String with the iv to use in the encryption
+	 * @return
+	 *  A Base64 String with the encrypted json
+	 */
 	public String encryptJSON(String json, String aesIV){
 		try {
 			new JSONObject(json);
@@ -108,18 +148,41 @@ public class Jits {
 			e.printStackTrace();
 		} catch (org.json.JSONException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	/**
+	 * Creates the URL for publishing data
+	 * 
+	 * @return
+	 *  A String with the publisher URL
+	 */
 	public String createPublisherURL(){
 		return server + "publisher.php?con=" + connectionKey;
 	}
 	
+	/**
+	 * Creates the URL for iv requesting and activation
+	 * 
+	 * @return
+	 *  A String with the iv request URL
+	 */
 	public String createIvURL(){
 		return server + "generatorIV.php?con=" + connectionKey;
 	}
 	
+	/**
+	 * Send an encrypted json String to JITS server
+	 * 
+	 * @param encryptedJSON
+	 *  - A String with an encrypted json
+	 * @return
+	 *  true - the data was sent<p>
+	 *  false - the data could not be sent
+	 */
 	public boolean sendDataEncript(String encryptedJSON){
 		if(encryptedJSON == null)
 			return false;
@@ -147,18 +210,55 @@ public class Jits {
 		return false;
 	}
 	
+	/**
+	 * Send a json String to JITS server
+	 * 
+	 * @param json
+	 *  - A String with a valid json
+	 * @return
+	 *  true - the data was sent<p>
+	 *  false - the data could not be sent
+	 */
 	public boolean sendDataJson(String json){
 		return sendDataEncript(encryptJSON(json, getIV()));
 	}
 	
+	/**
+	 * Send two arrays to JITS server
+	 * 
+	 * @param names
+	 *  - An array of Strings that specifies the json attributes
+	 * @param values
+	 *  - An array of floats that indicates the json values
+	 * @return
+	 *  true - the data was sent<p>
+	 *  false - the data could not be sent
+	 */
 	public boolean sendDataArray(String[] names, float[] values){
 		return sendDataJson(fromArrayToJSON(names, values));
 	}
 	
+	/**
+	 * Send two lists to JITS server
+	 * 
+	 * @param names
+	 *  - An array of Strings that specifies the json attributes
+	 * @param values
+	 *  - An array of floats that indicates the json values
+	 * @return
+	 *  true - the data was sent<p>
+	 *  false - the data could not be sent
+	 */
 	public boolean sendDataList(List<String> names, List<Float> values){
 		return sendDataJson(fromListToJSON(names, values));
 	}
 	
+	/**
+	 * Gets the iv to use while activates the iv in the server-side
+	 * 
+	 * @return
+	 *  A Base64 String with the iv
+	 */
 	private String getIV(){
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(createIvURL()).openConnection();

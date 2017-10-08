@@ -13,16 +13,9 @@
 		$connection = $_POST["connection"];
 		$aes_key = $_POST["aes_key"];
 
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("registerClient.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
+		
 		$sql = "INSERT INTO clients (creation, name, aes, type, connection_key, aes_key)
 				VALUES (NOW(), '$name', '$aes', '$type', '$connection', '$aes_key')";
 		if ($conn->query($sql) === TRUE) {

@@ -10,7 +10,7 @@
 			unset($lines[$i++]);
 		unset($lines[$last]);
 		
-		$fp = fopen('jits_logs', 'w'); 
+		$fp = fopen('jits_logs.php', 'w'); 
 		fwrite($fp, implode('', $lines)."\$errors[] = \"".date("Y-m-d H:i:s")." - $file - $error\";\n?>"); 
 		fclose($fp); 
 	}

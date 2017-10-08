@@ -20,16 +20,9 @@
 		if($timeExecution == "")
 			$timeExecution = "0";
 		
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("registerAlarm.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
+		
 		$sql = "INSERT INTO alarms (name, connection_key, client_name, value, cond, target, time_target)
 				VALUES ('$name', '$connectionKey', '$clientName', '$value', $condition, $target, $timeExecution)";
 				

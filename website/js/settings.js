@@ -9,7 +9,7 @@ function updateMail(){
 		data: { email: mail },
 		statusCode: {
 			200: function (response) {
-				document.getElementById('modalOk').style.display = 'block';
+				$('#modalOk').modal('toggle');
 			},
 			500: function (response) {
 				alert("There is something wrong with the server. Please try again later.");
@@ -27,7 +27,7 @@ function updateTimezone(){
 		data: { timezone: timezoneI },
 		statusCode: {
 			200: function (response) {
-				document.getElementById('modalOk').style.display = 'block';
+				$('#modalOk').modal('toggle');
 			},
 			500: function (response) {
 				alert("There is something wrong with the server. Please try again later.");
@@ -63,7 +63,7 @@ function updatePass(){
 		data: { oldPassword: pass, newPassword: newPass },
 		statusCode: {
 			200: function (response) {
-				document.getElementById('modalOk').style.display = 'block';
+				$('#modalOk').modal('toggle');
 			},
 			403: function (response) {
 				alert("The old password is not correct.");

@@ -38,29 +38,11 @@ body{
 	z-index: 2;
 }
 
-.header div{
-	color: #fff;
-	font-family: 'Exo', sans-serif;
-	font-size: 35px;
-	font-weight: 200;
-	
-    position: relative;
-	-webkit-animation-name: headerAnime; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
-    animation-name: headerAnime;
-    animation-duration: 2s;
-}
-
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes headerAnime {
-    0%   {left:-30px; top:0px;}
-    100% {left:0px; top:0px;}
-}
-
-/* Standard syntax */
-@keyframes headerAnime {
-    0%	  {left:-30px; top:0px;}
-    100%  {left:0px; top:0px;}
+h1{
+	-webkit-animation-name: inputAnime1; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1.6s; /* Safari 4.0 - 8.0 */
+    animation-name: inputAnime1;
+    animation-duration: 1.6s;
 }
 
 html,body {
@@ -92,9 +74,9 @@ html,body {
 	
     position: relative;
 	-webkit-animation-name: inputAnime1; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 1.5s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1.8s; /* Safari 4.0 - 8.0 */
     animation-name: inputAnime1;
-    animation-duration: 1.5s;
+    animation-duration: 1.8s;
 }
 .login input[type=password]{
 	width: 250px;
@@ -110,34 +92,22 @@ html,body {
 	margin-top: 10px;
 	
     position: relative;
-	-webkit-animation-name: inputAnime2; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 1.5s; /* Safari 4.0 - 8.0 */
-    animation-name: inputAnime2;
-    animation-duration: 1.5s;
+	-webkit-animation-name: inputAnime1; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+    animation-name: inputAnime1;
+    animation-duration: 2s;
 }
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes inputAnime1 {
-    0%   {left:40px; top:0px;}
-    100% {left:0px; top:0px;}
+    0%	  {opacity: 0;}
+    100%  {opacity: 1;}
 }
 
 /* Standard syntax */
 @keyframes inputAnime1 {
-    0%	  {left:40px; top:0px;}
-    100%  {left:0px; top:0px;}
-}
-
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes inputAnime2 {
-    0%   {left:30px; top:0px;}
-    100% {left:0px; top:0px;}
-}
-
-/* Standard syntax */
-@keyframes inputAnime2 {
-    0%	  {left:30px; top:0px;}
-    100%  {left:0px; top:0px;}
+    0%	  {opacity: 0;}
+    100%  {opacity: 1;}
 }
 
 .login input[type=submit]{
@@ -153,6 +123,11 @@ html,body {
 	font-weight: 400;
 	padding: 6px;
 	margin-top: 10px;
+	
+	-webkit-animation-name: inputAnime1; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 2.2s; /* Safari 4.0 - 8.0 */
+    animation-name: inputAnime1;
+    animation-duration: 2.2s;
 }
 
 .login input[type=submit]:hover{

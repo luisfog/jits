@@ -1,5 +1,5 @@
 <?php
-	ini_set('display_errors', '0');
+	//ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ./login.html' );
@@ -30,86 +30,64 @@
     <div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-					<div class="navbar-header">
-						 
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-							 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-						</button> <a class="navbar-brand" href="./index.php">JITS IoT</a>
-					</div>
-					
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav">
-							<li>
-								<a href="./index.php">Home</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Clients<strong class="caret"></strong></a>
-								<ul class="dropdown-menu">
 	<?php
+		require("./server/UI.php");
+		drawMenu("Settings");
 		
-		include("./server/dbinfo.php");
-		
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			return;
-		}
-		
-		$sql = "SELECT * FROM clients ORDER BY name";
-		$result = $conn->query($sql);
-
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
-			}
-		}
+		$conn = getConnectionFront();
 	?>
-								</ul>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="viewList">
-	<?php
-		$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
-		$result = $conn->query($sql);
-
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
-				
-			}
-		}
-	?>
-								</ul>
-							</li>
-							<li>
-								<a href="./alarms.php">Alarms</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">New<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="clientList">
-									<li><a href="./newClient.php">New Client</a></li>
-									<li><a href="./newView.php">New View</a></li>
-								</ul>
-							</li>
-							<li class="active">
-								<a href="./settings.php" title="Settings"><span class="fa fa-sliders"></span></a>
-							</li>
-							<li>
-								<a href="https://github.com/luisfog/jits" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
-							</li>
-							<li>
-								<a href="./server/logout.php" title="Logout"><span class="fa fa-sign-out"></span></a>
-							</li>
-						</ul>						
-					</div>
-					
-				</nav>
 				
 				<br/><br/><br/>
+	<?php
+		$versionGit = file_get_contents('https://raw.githubusercontent.com/luisfog/jits/master/website/update/version');
 	
+		$versionServer = "";
+		if(file_exists('./update/version')){
+			$versionServer = file_get_contents('./update/version');
+		}
+		
+		if(compareVersions($versionGit, $versionServer)){
+	?>
+				<div class="alert alert-success alert-dismissable" id="errorDIV">
+					 
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+						×
+					</button>
+	<?php
+		echo "<h4>Version ".$versionGit." available!</h4>";
+		echo "<p>Download <b><a href='#modalUpdates' title='Download Updates' role='button' data-toggle='modal'>here</a></b>".
+				" or in the update option below.</p>";
+		if($versionServer == "")
+			echo "<p>At this moment you are not use a GitHub version.</p>";
+		else
+			echo "<p>Your current version is $versionServer</p>";
+	?>
+					
+				</div>
+	<?php
+		}
+		
+		function compareVersions($version1, $version2){
+			if($version1 == "")
+				return false;
+			if($version2 == "")
+				return true;
+			
+			$version1 = explode(".", substr($version1, 1));
+			$version2 = explode(".", substr($version2, 1));
+			
+			$size = min(sizeof($version1), sizeof($version2));
+			for($i=0; $i<$size; $i++){
+				if($version1[$i] > $version2[$i])
+					return true;
+				if($version1[$i] < $version2[$i])
+					return false;
+			}
+			if(sizeof($version1) > sizeof($version2))
+				return true;
+			return false;
+		}
+	?>
 				<div class="login-page">
 					<h2>Settings</h2>
 					<div class="form">
@@ -175,28 +153,26 @@
 						<a href="./logs.php" title="Download Libraries"><h4><span class="fa fa-exclamation-triangle"></span> Logs <span class="fa fa-exclamation-triangle"></span></h4></a>
 					</div>
 				</div>
+				
+				<div class="login-page">
+					<div class="form">
+						<h4>Updates</h4>
+						<button onclick="$('#modalUpdates').modal('toggle');">Update JITS</button>
+					</div>
+				</div>
 				<br/><br/><br/>
 			</div>
 		</div>
 	</div>
 	
-	
-	<div class="modal" id="modalOk" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
-					<h3 class="modal-title">Updates</h3>
-				</div>
-				<div class="modal-body" >
-					<p>Your settings were updated!</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">Ok</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php
+		$bodyModal = "<p>Your settings were updated!</p>";
+		drawOkModal("modalOk", "Updates", $bodyModal, "OK");
+		
+		$bodyModal = "<p>Are you sure you want to update JITS?</p>";
+		$bodyModal .= "<p>This action can take some time.</p>";
+		drawModal("modalUpdates", "Update JITS", $bodyModal, "window.location = './updateJITS.php';", "Yes", "No");
+	?>
 	
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

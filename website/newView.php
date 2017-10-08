@@ -29,85 +29,22 @@
     <div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-					<div class="navbar-header">
-						 
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-							 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-						</button> <a class="navbar-brand" href="./index.php">JITS IoT</a>
-					</div>
-					
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav">
-							<li>
-								<a href="./index.php">Home</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Clients<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="clientList">
-	<?php
+	<?php	
+		require("./server/UI.php");
+		drawMenu("Views");
 		
-		include("./server/dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			return;
-		}
+		$conn = getConnectionFront();
 		
 		$sql = "SELECT * FROM clients ORDER BY name";
 		$result = $conn->query($sql);
 		$optionClients = "";
-
+		
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
 				$optionClients .= "<option value='".$row["connection_key"]."'>".base64_decode($row["name"])."</option>";
 			}
 		}
 	?>
-								</ul>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="viewList">
-	<?php
-		$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
-		$result = $conn->query($sql);
-
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
-			}
-		}
-	?>
-								</ul>
-							</li>
-							<li>
-								<a href="./alarms.php">Alarms</a>
-							</li>
-							<li class="dropdown active">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">New<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="clientList">
-									<li><a href="./newClient.php">New Client</a></li>
-									<li><a href="./newView.php">New View</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="./settings.php" title="Settings"><span class="fa fa-sliders"></span></a>
-							</li>
-							<li>
-								<a href="https://github.com/luisfog/jits" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
-							</li>
-							<li>
-								<a href="./server/logout.php" title="Logout"><span class="fa fa-sign-out"></span></a>
-							</li>
-						</ul>
-					</div>
-					
-				</nav>
-				
 				<br/><br/><br/>
 				
 				<div class="row login-page" style="width: 400px">

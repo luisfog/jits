@@ -11,16 +11,8 @@
 		$name = $_SESSION['name'];
 		$timezone = $_POST['timezone'];
 		
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("updateTimezone.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 		
 		$sql = "UPDATE webUsers SET timezoneset='$timezone' WHERE user LIKE '$name'";
 		

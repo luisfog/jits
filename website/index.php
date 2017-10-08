@@ -47,105 +47,47 @@
     <div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-					<div class="navbar-header">
-						 
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-							 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-						</button> <a class="navbar-brand" href="./index.php">JITS IoT</a>
-					</div>
-					
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav">
-							
 	<?php
-		if ($init){
-	?>
-							<li class="active">
-								<a href="./index.php">Home</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Clients<strong class="caret"></strong></a>
-								<ul class="dropdown-menu">
-	<?php
-		
-		include("./server/dbinfo.php");
-		
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			return;
-		}
-		
-		$clientsKeys = array();
-		$clientsName = array();
-		$views = array();
-		
-		$sql = "SELECT * FROM clients ORDER BY name";
-		$result = $conn->query($sql);
+		require("./server/UI.php");
+		if($init){
+			drawMenu("Home");
+			
+			$conn = getConnectionFront();
+			
+			$clientsKeys = array();
+			$clientsName = array();
+			$created = array();
+			$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
+			$server = $actual_link;
+			$connKey = array();
+			$aesKey = array();
+			$views = array();
+			
+			$sql = "SELECT * FROM clients ORDER BY name";
+			$result = $conn->query($sql);
 
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
-				$clientsKeys[] = $row["connection_key"];
-				$clientsName[] = base64_decode($row["name"]);
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					$clientsKeys[] = $row["connection_key"];
+					$clientsName[] = base64_decode($row["name"]);
+					$created[] = $row["creation"];
+					$connKey[] = $row["connection_key"];
+					$aesKey[] = $row["aes_key"];
+				}
 			}
-		}
-	?>
-								</ul>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="viewList">
-	<?php
-		$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
-		$result = $conn->query($sql);
+			$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
+			$result = $conn->query($sql);
 
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
-				$views[] = $row["name"];
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					$views[] = $row["name"];
+				}
 			}
-		}
-	?>
-								</ul>
-							</li>
-							<li>
-								<a href="./alarms.php">Alarms</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">New<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="clientList">
-									<li><a href="./newClient.php">New Client</a></li>
-									<li><a href="./newView.php">New View</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="./settings.php" title="Settings"><span class="fa fa-sliders"></span></a>
-							</li>
-							<li>
-								<a href="https://github.com/luisfog/jits" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
-							</li>
-							<li>
-								<a href="./server/logout.php" title="Logout"><span class="fa fa-sign-out"></span></a>
-							</li>
-						</ul>
-	<?php
 		}else{
-	?>
-							<li class="active">
-								<a href="">Let's start</a>
-							</li>
-						</ul>
-	<?php
+			drawMenu("Init");
 		}
 	?>
-						
-					</div>
-					
-				</nav>
-				
 				<br/><br/><br/>
 				
 	<?php
@@ -215,7 +157,6 @@
 			}
 			
 			echo "<p><input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./view.php?view=$view\"' />";
-			//echo "<a id='modal-723263' href='#modal-container-723263' role='button' class='btn' data-toggle='modal'<script >+Info</a></p>";
 			echo "</div></div></div>";
 			$i++;
 		}
@@ -241,6 +182,7 @@
 			echo "<div class='thumbnail'><div class='caption'>";
 			echo "<h3>".$clientsName[$i]."</h3>";
 			
+			$valuesBase64 = "";
 			$data = false;
 			if ($result && $result->num_rows > 0) {
 				$lastRow = $result->fetch_assoc();
@@ -253,9 +195,11 @@
 						$values[] = $key;
 						$valuesRound .= "ROUND(AVG($key),2) as $key,";
 						$valuesNumbers[$key] = $value;
+						$valuesBase64 .= base64_decode($key).", ";
 					}
 				}
 				$valuesRound = substr($valuesRound, 0, -1);
+				$valuesBase64 = substr($valuesBase64, 0, -2);
 				
 				$sql = "SELECT $valuesRound FROM client_$clientKey WHERE creation > DATE_SUB(NOW(), INTERVAL 24 HOUR);";
 				$result = $conn->query($sql);
@@ -287,8 +231,9 @@
 				echo "<div style='width: 100%; height: 200px;'><br/>No data (at least in the last 24 hours)<br/><br/></div>";
 			}
 			
-			echo "<p><input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./client.php?client=$clientKey\"' />";
-			//echo "<a id='modal-723263' href='#modal-container-723263' role='button' class='btn' data-toggle='modal'<script >+Info</a></p>";
+			echo "<a href='#modalInfor-$clientKey' title='More Information' role='button' class='btn' data-toggle='modal'<script >+Info</a>";
+			echo "<input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./client.php?client=$clientKey\"' />";
+			drawInfoModal("modalInfor-$clientKey", $clientsName[$i], $created[$i], $server, $connKey[$i], $aesKey[$i], $valuesBase64);
 			echo "</div></div></div>";
 			$i++;
 		}
@@ -356,6 +301,7 @@
 						<p>Create clients table<span class="ok" id="createClients">OK</span></p>
 						<p>Create views table<span class="ok" id="createViews">OK</span></p>
 						<p>Create alarms table<span class="ok" id="createAlarms">OK</span></p>
+						<p>Create configuration table<span class="ok" id="createConfig">OK</span></p>
 						<p>Create website user<span class="ok" id="createWebUser">OK</span></p>
 						<p>Delete init files<span class="ok" id="deleteInits">OK</span></p>
 						<p>Refreshing page<span class="ok" id="refresh">10</span></p>

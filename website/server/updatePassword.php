@@ -12,16 +12,8 @@
 		$oldPassword = $_POST['oldPassword'];
 		$newPassword = $_POST['newPassword'];
 		
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("updatePassword.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 		
 		$sql = "SELECT pass FROM webUsers WHERE user LIKE '$name'";
 		$result = $conn->query($sql);

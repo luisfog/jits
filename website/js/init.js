@@ -161,6 +161,23 @@ function createViews(serverI, userI, passI){
 		statusCode: {
 			200: function (response) {
 				document.getElementById("createViews").style.visibility = "visible";
+				createConfiguration(serverI, userI, passI);
+			},
+			500: function (response) {
+				alert(response.responseText);
+			}
+		}
+	});
+}
+
+function createConfiguration(serverI, userI, passI){
+	$.ajax({
+		method: "POST",
+		url: "./server/init.php",
+		data: { server: serverI, user: userI, pass: passI, order: "configurations" },
+		statusCode: {
+			200: function (response) {
+				document.getElementById("createConfig").style.visibility = "visible";
 				createAlarms(serverI, userI, passI);
 			},
 			500: function (response) {

@@ -1,0 +1,9 @@
+Jits	KEYWORD1
+getIV_Ethernet	KEYWORD2
+fromArrayToJSON	KEYWORD2
+encryptJSON	KEYWORD2
+createPublisherURL	KEYWORD2
+createIvURL	KEYWORD2
+sendDataEncript_Ethernet	KEYWORD2
+sendDataJson_Ethernet	KEYWORD2
+sendDataArray_Ethernet	KEYWORD2

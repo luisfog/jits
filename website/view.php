@@ -20,6 +20,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="css/multiple-select.css" rel="stylesheet">
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
@@ -31,84 +32,12 @@
     <div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-					<div class="navbar-header">
-						 
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-							 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-						</button> <a class="navbar-brand" href="./index.php">JITS IoT</a>
-					</div>
-					
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav">
-							<li>
-								<a href="./index.php">Home</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Clients<strong class="caret"></strong></a>
-								<ul class="dropdown-menu">
-	<?php
-		echo "<script>var viewName = '".$_REQUEST["view"]."';</script>";
-	
-		include("./server/dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			return;
-		}
+	<?php	
+		require("./server/UI.php");
+		drawMenu("Views");
 		
-		$sql = "SELECT * FROM clients ORDER BY name";
-		$result = $conn->query($sql);
-
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./client.php?client=".$row["connection_key"]."'>".base64_decode($row["name"])."</a></li>";
-			}
-		}
+		$conn = getConnectionFront();
 	?>
-								</ul>
-							</li>
-							<li class="dropdown active">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Views<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="viewList">
-	<?php
-		$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
-		$result = $conn->query($sql);
-
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				echo "<li><a href='./view.php?view=".$row["name"]."'>".base64_decode($row["name"])."</a></li>";
-			}
-		}
-	?>
-								</ul>
-							</li>
-							<li>
-								<a href="./alarms.php">Alarms</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">New<strong class="caret"></strong></a>
-								<ul class="dropdown-menu" id="clientList">
-									<li><a href="./newClient.php">New Client</a></li>
-									<li><a href="./newView.php">New View</a></li>
-								</ul>
-							</li>
-							<li>
-								<a href="./settings.php" title="Settings"><span class="fa fa-sliders"></span></a>
-							</li>
-							<li>
-								<a href="https://github.com/luisfog/jits" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
-							</li>
-							<li>
-								<a href="./server/logout.php" title="Logout"><span class="fa fa-sign-out"></span></a>
-							</li>
-						</ul>
-					</div>
-					
-				</nav>
-				
 				<br/><br/><br/>
 				
 				<div class="row">
@@ -126,7 +55,8 @@
 		$columnsNameArrBase64 = array();
 		$columnsNameArr = array();
 		$valuesBase64 = "";
-		$values = "";
+		$valuesBase64Simple = "";
+		$valuesSimple = "";
 		$totalPushes = 0;
 		$i = 0;
 
@@ -154,23 +84,32 @@
 			}
 			
 			$valuesBase64 .= base64_decode($clients[$j])."::".base64_decode($valuesName[$j])." (".base64_decode($columnsNameArr[$j])."), ";
-			$values .= $clients[$j]."::".$valuesName[$j]." (".$columnsNameArr[$j]."), ";
+			
+			$valuesBase64Simple .= base64_decode($columnsNameArr[$j]).", ";
+			$valuesSimple .= $columnsNameArr[$j].", ";
 		}
-		$values = substr($values, 0, -2);
 		$valuesBase64 = substr($valuesBase64, 0, -2);
+		$valuesBase64Simple = substr($valuesBase64Simple, 0, -2);
+		$valuesSimple = substr($valuesSimple, 0, -2);
 		
 		echo "<p><b>Total pushes:</b> ".$totalPushes."</p>";
-		echo "<a onclick='document.getElementById(\"modalDelete\").style.display = \"block\";' title='Delete' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
+		//echo "<a href='#modalDelete'  role='button' class='btn' data-toggle='modal' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
 		echo "<p><b>Values:</b> ".$valuesBase64."</p>";
+		
+		echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal'><span class='fa fa-sliders'></span></a>";
+		echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal'><span class='fa fa-trash-o'></span></a>";
+			
 		
 		if ($totalPushes > 0) {
 			echo "<script>var connectionKeysList = '".implode(",", $connectionKeys)."';</script>";
 			echo "<script>var columnsNamesList = '".implode(",", $columnsNameArrBase64)."';</script>";
 			echo "<script>var valuesList = '".implode(",", $valuesName)."';</script>";
-			//echo "<script>var valuesNamesList = '$values';</script>";
-			//echo "<script>var valuesNamesList = '$columnsName';</script>";
+			echo "<script>var valuesFull64 = '".$valuesBase64."';</script>";
 			echo "<script>var viewName = '$name';</script>";
+			echo "<script>var valuesBase64 = '".$valuesBase64Simple."';</script>";
+			echo "<script>var values = '".$valuesSimple."';</script>";
 			echo "<script>window.onload = function(){";
+			echo "		$('#selectValues').multipleSelect();";
 			echo "		initChart();";
 			echo "		getData();";
 			echo "	};</script>";
@@ -181,24 +120,17 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12">
-						<div class="col-xl-12 col-lg-12 col-md-12 thumbnail">
-							<div class="col-xl-6 col-lg-6 col-md-6" style="margin: 10px 0 10px 0;" >
-								<select id="dataLong" style="width:100%;padding:14px;" onchange="getData()">
-									<option value="real">Real-Time (1 second)</option>
-									<option value="24hours">Last 24 hours</option>
-									<option value="48hours">Last 48 hours</option>
-									<option value="7days">Last 7 days</option>
-									<option value="60days">Last 60 days</option>
-									<option value="120days">Last 120 days</option>
-									<option value="180days">Last 180 days</option>
-									<option value="all">All data</option>
-								</select>
-							</div>
-							<div class="col-xl-6 col-lg-6 col-md-6" style="margin: 10px 0 10px 0;" >
-								<input type="button" style="width:100%;height:47px;" value="Export" class="btn-export" onclick="document.getElementById('modalExport').style.display = 'block';" />
-							</div>
-						</div>
+					<div class="col-xl-12 col-lg-12 col-md-12" style="margin: 10px 0 10px 0;" >
+						<select id="dataLong" style="width:100%;padding:14px;" onchange="getData()">
+							<option value="real">Real-Time (1 second)</option>
+							<option value="24hours">Last 24 hours</option>
+							<option value="48hours">Last 48 hours</option>
+							<option value="7days">Last 7 days</option>
+							<option value="60days">Last 60 days</option>
+							<option value="120days">Last 120 days</option>
+							<option value="180days">Last 180 days</option>
+							<option value="all">All data</option>
+						</select>
 					</div>
 				</div>
 				
@@ -221,47 +153,35 @@
 		</div>
 	</div>
 	
-	<div class="modal" id="modalExport" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
-					<h3 class="modal-title">Export Data</h3>
-				</div>
-				<div class="modal-body" >
-					<p>Please select the type of export:</p>
-					
-					<label><input type="radio" name="typeExport" value="csv" checked> CSV</label><br/>
-					<label><input type="radio" name="typeExport" value="tsv"> TSV</label><br>
-					<label><input type="radio" name="typeExport" value="json"> JSON</label><br>
-				</div>
-				<div class="modal-footer">
-					<button id="modalYesButton" type="button" class="btn btn-export" onclick="exportData()" >Export</button>
-					<button type="button" class="btn btn-default" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal" id="modalDelete" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">&times;</button>
-					<h3 class="modal-title">Delete View</h3>
-				</div>
-				<div class="modal-body" >
-					<p>Are you sure you want to delete this View?</p>
-				</div>
-				<div class="modal-footer">
-					<button id="modalYesButton" type="button" class="btn btn-export" onclick="deleteView()" >Yes</button>
-					<button type="button" class="btn btn-default" onclick="this.parentElement.parentElement.parentElement.parentElement.style.display = 'none';">No</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php
+		$bodyModal = "<p>Please select the type of export:</p>".
+					"<label><input type=\"radio\" name=\"typeExport\" value=\"csv\" checked> CSV</label><br/>".
+					"<label><input type=\"radio\" name=\"typeExport\" value=\"tsv\"> TSV</label><br>".
+					"<label><input type=\"radio\" name=\"typeExport\" value=\"json\"> JSON</label><br>";
+		drawModal("modalExport", "Export Data", $bodyModal, "exportData();", "Export", "Cancel");
+		
+		$bodyModal = "<p>Are you sure you want to delete this View?</p>";
+		drawModal("modalDelete", "Delete View", $bodyModal, "deleteView();", "Yes", "No");
+		
+		$sql = "select * from configurations as cf, views as vw ".
+				"where cf.id_client_view = vw.id AND vw.name LIKE '".$_REQUEST["view"]."'";
+		$result = $conn->query($sql);
+
+		if ($result && $result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			if($row["yyMin"] == "-1")
+				$row["yyMin"] = "";
+			if($row["yyMax"] == "-1")
+				$row["yyMax"] = "";
+			drawSettingsModal($name, "modalExport", "saveData();", $row["dataset"],
+							$row["datasetType"], $row["yyMin"], $row["yyMax"], $row["avgOn"], $row["valuesS"], $valuesSimple, $valuesBase64Simple);
+		}else{
+			drawSettingsModal($name, "modalExport", "saveData();", "", "", "", "", "", $valuesSimple, $valuesSimple, $valuesBase64Simple);
+		}
+	?>
 	
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/multiple-select.js"></script>
   </body>
 </html>

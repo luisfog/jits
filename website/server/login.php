@@ -5,15 +5,8 @@
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		
-		include('./dbinfo.php');
-		
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			include("./server/logs.php");
-			insertToLog("login.php", "Connection failed: " . $conn->connect_error);
-			header('Location: ../index.php' );
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 
 		$sql = "SELECT user, pass FROM webUsers WHERE user LIKE '$username'";
 		$result = $conn->query($sql);

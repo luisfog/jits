@@ -11,16 +11,8 @@
 		$name = $_SESSION['name'];
 		$email = $_POST['email'];
 		
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("updateMail.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 		
 		$sql = "UPDATE webUsers SET email='$email' WHERE user LIKE '$name'";
 		

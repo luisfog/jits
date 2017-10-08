@@ -9,6 +9,8 @@ var chart;
 var myChart;
 
 function initChart(){
+	document.getElementById("dataLong").value = document.getElementById("dataSelect").value;
+	
 	chart = document.getElementById('chart');
 	myChart = echarts.init(chart);
 	
@@ -25,6 +27,9 @@ var options = 	{
 					},
 					legend: {
 						data: ""
+					},
+					grid: {
+						bottom: 70
 					},
 					toolbox: {
 						show: true,
@@ -112,6 +117,17 @@ function getData(){
 		}
 	}else{
 		stop = true;
+		while(labels.length > 0) labels.pop();
+		while(dataArr.length > 0) dataArr.pop();
+		while(options.legend.data.length > 0) options.legend.data.pop();
+		while(options.xAxis.data != undefined && options.xAxis.data.length > 0) options.xAxis.data.pop();
+		while(options.series != undefined && options.series.length > 0) options.series.pop();
+		
+		var valuesArr = columnsNamesList.split(",");
+		for(var i=0; i<valuesArr.length; i++){
+			dataArr[i] = [];
+			dataArrKeys[i] = valuesArr[i];
+		}
 	}
 	
 	if(dataLong_ui.selectedIndex == 0 && labels.length > 0)
@@ -144,12 +160,12 @@ function getData(){
 					for(key in arr[i]) {
 						if(key == "creation"){
 							if(!stop && !firstReal){
-								labels.push(arr[i][key]);
+								labels.push(arr[i][key].replace(" ", "\n"));
 							}else{
 								if(i == 0){
-									labels = [arr[i][key]];
+									labels = [arr[i][key].replace(" ", "\n")];
 								}else{
-									labels.push(arr[i][key]);
+									labels.push(arr[i][key].replace(" ", "\n"));
 								}
 							}
 						}else{
@@ -207,7 +223,10 @@ function getData(){
 					options.xAxis.data = labels;
 					options.series = seriesArr;
 					myChart.setOption(options);
-				}else{
+					
+					updateChartSettingsEmp();
+					
+				}else if(arr.length > 0){
 					for(var i=0; i<dataArr.length; i++){
 						delete options.series[i]["type"];			
 					}
@@ -253,12 +272,12 @@ function exportData(){
 	var content = "";
 	
 	if(exportType == "tsv")
-		content += "date\t" + values.replace(", ", "\t");
+		content += "date\t" + valuesFull64.replace(", ", "\t");
 	else
-		content += "date," + values.replace(" ", "");
+		content += "date," + valuesFull64.replace(" ", "");
 		
 	for(var i=0; i<labels.length; i++){
-		content += "\n" + labels[i];
+		content += "\n" + labels[i].replace("\n", " ");
 		
 		dataArr.forEach(function(indexValue, index){
 			if(exportType == "tsv")
@@ -301,10 +320,119 @@ function exportData(){
 	
 	var link = document.createElement("a");
 	link.setAttribute("href", encodedContent);
-	link.setAttribute("download", "jits_" + clientName + "." + extension);
+	link.setAttribute("download", "jits_" + viewName + "." + extension);
 	document.body.appendChild(link);
 	link.click();
 	
-	document.getElementById('modalExport').style.display = 'none';
+	$('#modalExport').modal('toggle');
 }
 
+function saveData(){
+	var dataSelectI = document.getElementById("dataSelect").value;
+	var dataTypeSelectI = document.getElementById("dataTypeSelect").value;
+	
+	var yyMinI = document.getElementById("yyMin").value;
+	var yyMaxI = document.getElementById("yyMax").value;
+	
+	var avgSelectI = document.getElementById("avgSelect").value;
+	
+	var values = $('#selectValues').val();
+	
+	var valuesSI = "";
+	if(values != null){
+		for(var i=0; i<values.length-1; i++)
+			valuesSI += values[i] + ",";
+		valuesSI += values[values.length-1];
+	}
+	
+	$.ajax({
+		method: "POST",
+		url: "./server/updateSettings.php",
+		data: {
+			type: "view",
+			target: viewName,
+			dataSelect: dataSelectI,
+			dataTypeSelect: dataTypeSelectI,
+			valuesS: valuesSI,
+			yyMin: yyMinI,
+			yyMax: yyMaxI,
+			avgSelect: avgSelectI
+			},
+		statusCode: {
+			200: function (response) {
+				
+				if(document.getElementById("dataLong").value != dataSelectI){
+					document.getElementById("dataLong").value = dataSelectI;
+					getData();
+				}
+	
+				updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI);
+				
+				$('#modalSettings').modal('toggle');
+			},
+			500: function (response) {
+				$('#modalSettings').modal('toggle');
+			}
+		}
+	});
+}
+
+function updateChartSettingsEmp(){
+	var dataSelectI = document.getElementById("dataSelect").value;
+	var dataTypeSelectI = document.getElementById("dataTypeSelect").value;
+	var yyMinI = document.getElementById("yyMin").value;
+	var yyMaxI = document.getElementById("yyMax").value;
+	var avgSelectI = document.getElementById("avgSelect").value;
+	var values = $('#selectValues').val();
+	
+	var valuesSI = "";
+	if(values != null){
+		for(var i=0; i<values.length-1; i++)
+			valuesSI += values[i] + ",";
+		valuesSI += values[values.length-1];
+	}
+	
+	updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI);
+}
+
+function updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI){
+	var hidenData = {};
+	var valuesArr = values.split(", ");
+	var valuesArr64 = valuesBase64.split(", ");
+	
+	for(var i=0; i<options.series.length; i++){
+		if(avgSelectI == "avgOff")
+			options.series[i].markLine.data = [];
+		else
+			options.series[i].markLine.data = [{type: 'average', name: 'AVG'}];
+		
+		if(dataTypeSelectI.indexOf("line") > -1)
+			options.series[i].type = "line";
+		if(dataTypeSelectI.indexOf("bar") > -1)
+			options.series[i].type = "bar";
+		
+		if(dataTypeSelectI.indexOf("T") > -1)
+			options.series[i].stack = null;
+		else
+			options.series[i].stack = "true";
+		
+		if(valuesSI.indexOf(valuesArr[i]) == -1)
+			hidenData[valuesArr64[i]] = false;
+		else
+			hidenData[valuesArr64[i]] = true;
+	}
+	
+	options.legend.selected = hidenData;
+	
+	if(yyMinI == "")
+		options.yAxis.min = 'dataMin';
+	else
+		options.yAxis.min = yyMinI;
+	if(yyMaxI == "")
+		options.yAxis.max = 'dataMax';
+	else
+		options.yAxis.max = yyMaxI;
+	
+	myChart.setOption(options);
+	
+}

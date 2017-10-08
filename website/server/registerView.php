@@ -10,16 +10,8 @@
 		$name = str_replace('=', '', base64_encode($_POST["name"]));
 		$list = $_POST["list"];
 
-		include("./dbinfo.php");
-
-		$conn = new mysqli($databaseHost, $user, $pass, $database);
-		if ($conn->connect_error) {
-			header("HTTP/1.1 500 Internal Server Error");
-			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
-			insertToLog("registerView.php", "Connection failed: " . $conn->connect_error);
-			return;
-		}
+		require("./database.php");
+		$conn = getConnectionBack();
 		
 		$arr = json_decode($list);
 		for($i = 0; $i < count($arr); $i++){

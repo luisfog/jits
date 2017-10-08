@@ -17,6 +17,7 @@ public class Tester {
 				
 				List<String> names = new ArrayList<String>();
 				List<Float> values = new ArrayList<Float>();
+				
 				names.add("Têmp");
 				values.add((float)(Math.random() * 100 + 1));
 				names.add("Hú m");

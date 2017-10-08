@@ -79,8 +79,14 @@ function updateViewList(){
 					li.appendChild(a);
 					ul.appendChild(li);
 				}
-				
-				
+				var li = document.createElement("li");
+				var a = document.createElement('a');
+				a.style.marginTop = "15px";
+				a.style.fontWeight = "bold";
+				a.setAttribute('href',"newView.php");
+				a.innerHTML = "<span class='fa fa-plus'></span> Add View</a>";
+				li.appendChild(a);
+				ul.appendChild(li);
 			}
 		}
 	})

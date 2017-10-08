@@ -129,6 +129,19 @@
 	color: #9cf;
 }
 
+.inputText {
+	font-family: "Roboto", sans-serif;
+	outline: 0;
+	background: #669bd1;
+	color: #FFFFFF;
+	font-weight: bold;
+	width: 49%;
+	border: 0;
+	padding: 15px;
+	box-sizing: border-box;
+	font-size: 14px;
+}
+
 .form input, select {
 	font-family: "Roboto", sans-serif;
 	outline: 0;
@@ -366,4 +379,15 @@ tr.header:hover{
 .x b:nth-child(4){
   border-right-color:#f5f5f5;
   right:-2px;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 0 0 0;
+}
+
+.ms-drop input[type="checkbox"]{
+	width: 18px;
+    height: 18px;
+    position: relative;
+    margin: 5px auto;
 }

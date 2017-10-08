@@ -147,6 +147,31 @@
 				$conn->close();
 				return;
 			}
+		}else if(strcmp($_POST['order'], "configurations") == 0){
+			$sql = "CREATE TABLE configurations (
+					id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+					type VARCHAR(10) NOT NULL,
+					id_client_view INT(6) NOT NULL,
+					dataset VARCHAR(10) NOT NULL,
+					datasetType VARCHAR(10) NOT NULL,
+					valuesS TEXT,
+					yyMin INT NOT NULL,
+					yyMax INT NOT NULL,
+					avgOn BIT NOT NULL
+					)";
+			if ($conn->query($sql) === TRUE) {
+				header("HTTP/1.1 200 OK");
+				echo "Views table created successfully";
+				$conn->close();
+				return;
+			} else {
+				header("HTTP/1.1 500 Internal Server Error");
+				echo "Error creating views table: " . $conn->error;
+				include("./server/logs.php");
+				insertToLog("init.php", "Error creating views table: " . $conn->error);
+				$conn->close();
+				return;
+			}
 		}else if(strcmp($_POST['order'], "alarms") == 0){
 			$sql = "CREATE TABLE alarms (
 					id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

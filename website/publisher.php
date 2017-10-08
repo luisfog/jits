@@ -315,13 +315,7 @@
 			}
 		}
 		
-		//
-		$sql = "SELECT * FROM webUsers LIMIT 1";
-		$result = $conn->query($sql);
-		if ($result && $result->num_rows > 0) {
-			$lastRow = $result->fetch_assoc();
-			date_default_timezone_set($lastRow["timezoneset"]);
-		}
+		date_default_timezone_set("Greenwich");
 		
 		$sql = "INSERT INTO client_".$_GET['con']." (creation, $insert)
 				VALUES ('".date('Y-m-d H:i:s')."', $values)";
