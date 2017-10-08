@@ -176,10 +176,10 @@
 				$row["yyMin"] = "";
 			if($row["yyMax"] == "-1")
 				$row["yyMax"] = "";
-			drawSettingsModal($name, "modalExport", "saveData();", $row["dataset"],
+			drawSettingsModal(base64_decode($name), "modalExport", "saveData();", $row["dataset"],
 							$row["datasetType"], $row["yyMin"], $row["yyMax"], $row["avgOn"], $row["valuesS"], $valuesSimple, $valuesBase64Simple);
 		}else{
-			drawSettingsModal($name, "modalExport", "saveData();", "", "", "", "", "", $valuesSimple, $valuesSimple, $valuesBase64Simple);
+			drawSettingsModal(base64_decode($name), "modalExport", "saveData();", "", "", "", "", "", $valuesSimple, $valuesSimple, $valuesBase64Simple);
 		}
 	?>
 	
