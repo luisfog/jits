@@ -135,13 +135,23 @@
 		drawModal($id, $title, $body, null, null, $cancelText);
 	}
 	
-	function drawInfoModal($modalName, $name, $created, $server, $connKey, $aesKey, $valuesBase64){
+	function drawInfoModal($modalName, $name, $created, $server, $connKey, $aesKey, $valuesBase64, $totalPushes, $lastPush){
 		$body = "<div>".
 					"<p><b>Created on:</b> $created</p>".
 					"<p><b>Server:</b> $server</p>".
 					"<p><b>Connection key:</b> $connKey</p>".
 					"<p><b>AES key:</b> $aesKey</p>".
 					"<p><b>Values:</b> $valuesBase64</p>".
+					"<p><b>Total pushes:</b> $totalPushes</p>".
+					"<p><b>Last push:</b> $lastPush</p>".
+				"</div>";
+		drawModal($modalName, "\"".$name."\" Information", $body, null, null, "OK");
+	}
+	
+	function drawInfoViewModal($modalName, $name, $valuesBase64, $totalPushes){
+		$body = "<div>".
+					"<p><b>Values:</b> $valuesBase64</p>".
+					"<p><b>Total pushes:</b> $totalPushes</p>".
 				"</div>";
 		drawModal($modalName, "\"".$name."\" Information", $body, null, null, "OK");
 	}

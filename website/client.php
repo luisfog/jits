@@ -46,7 +46,7 @@
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 jumbotron">
 							<div class='col-xl-12 col-lg-12 col-md-12'>
-								<h2><b>
+								<h2 style="margin-bottom: 20px;"><b>
 	<?php
 		$sql = "SELECT name, creation, connection_key, aes_key, aes_iv FROM clients WHERE connection_key LIKE '".$_REQUEST["client"]."'";
 		$result = $conn->query($sql);
@@ -57,8 +57,8 @@
 			$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
 			
-			echo base64_decode($client["name"])."</b></h2><br/></div>";
-			echo "<div class='col-xl-12 col-lg-12 col-md-12'>";
+			echo base64_decode($client["name"])."</b> ";//</h2><br/></div>";
+			//echo "<div class='col-xl-12 col-lg-12 col-md-12'>";
 			
 			$name = base64_decode($client["name"]);
 			$created = $client["creation"];
@@ -71,17 +71,21 @@
 		$result = $conn->query($sql);
 		
 		$valuesBase64 = "";
+		$totalPushes = "";
+		$lastPush = "";
 
 		if ($result && $result->num_rows > 0) {
 			
 			$numberRows = $result->fetch_assoc();
-			echo "<p><b>Total pushes:</b> ".$numberRows["num"]."</p>";
+			//echo "<p><b>Total pushes:</b> ".$numberRows["num"]."</p>";
+			$totalPushes = $numberRows["num"];
 			
 			$sql = "SELECT * FROM client_".$_REQUEST["client"]." ORDER BY creation DESC LIMIT 1";
 			$result = $conn->query($sql);
 			$lastRow = $result->fetch_assoc();
 			
-			echo "<p><b>Last push:</b> ".$lastRow['creation']."</p>";
+			//echo "<p><b>Last push:</b> ".$lastRow['creation']."</p>";
+			$lastPush = $lastRow['creation'];
 			
 			$values = "";
 			foreach ($lastRow as $key => $value) {
@@ -94,9 +98,9 @@
 			$values = substr($values, 0, -2);
 			$valuesBase64 = substr($valuesBase64, 0, -2);
 			
-			echo "<a href='#modalInfo' title='More Information' role='button' class='btn' data-toggle='modal'><span class='fa fa-info-circle'></span></a>";
-			echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal'><span class='fa fa-sliders'></span></a>";
-			echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal'><span class='fa fa-trash-o'></span></a>";
+			echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-trash-o'></span></a>";
+			echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-sliders'></span></a>";
+			echo "<a href='#modalInfo' title='More Information' role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-info-circle'></span></a>";
 			
 			echo "<script>var valuesBase64 = '".$valuesBase64."';</script>";
 			echo "<script>var values = '".$values."';</script>";
@@ -107,6 +111,7 @@
 			echo "		getData();";
 			echo "	};</script>";
 	?>
+								</h2>
 							</div>
 						</div>
 					</div>
@@ -160,11 +165,11 @@
 		$bodyModal = "<p>Are you sure you want to delete this Client?</p>";
 		drawModal("modalDelete", "Delete Client", $bodyModal, "deleteClient();", "Yes", "No");
 		
-		drawInfoModal("modalInfo", $name, $created, $server, $connKey, $aesKey, $valuesBase64);
+		drawInfoModal("modalInfo", $name, $created, $server, $connKey, $aesKey, $valuesBase64, $totalPushes, $lastPush);
 		
 		if($valuesBase64 != ""){
 			$sql = "select * from configurations as cf, clients as cl ".
-					"where cf.id_client_view = cl.id AND cl.connection_key LIKE '".$_REQUEST["client"]."'";
+					"where cf.type LIKE 'client' AND cf.id_client_view = cl.id AND cl.connection_key LIKE '".$_REQUEST["client"]."'";
 			$result = $conn->query($sql);
 
 			if ($result && $result->num_rows > 0) {

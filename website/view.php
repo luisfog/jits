@@ -44,7 +44,7 @@
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 jumbotron">
 							<div class='col-xl-12 col-lg-12 col-md-12'>
-								<h2><b>
+								<h2 style="margin-bottom: 20px;"><b>
 	<?php
 		$sql = "SELECT name, connection_key, client_name, value, column_name FROM views WHERE name LIKE '".$_REQUEST["view"]."'";
 		$result = $conn->query($sql);
@@ -71,8 +71,8 @@
 			}
 		}
 		
-		echo base64_decode($name)."</b></h2></div>";
-		echo "<div class='col-xl-6 col-lg-6 col-md-6'>";
+		echo base64_decode($name)."</b>";//</h2></div>";
+		//echo "<div class='col-xl-6 col-lg-6 col-md-6'>";
 		
 		for($j = 0; $j<$i; $j++){
 			$sql = "SELECT COUNT(".$valuesName[$j].") AS num FROM client_".$connectionKeys[$j];
@@ -92,14 +92,14 @@
 		$valuesBase64Simple = substr($valuesBase64Simple, 0, -2);
 		$valuesSimple = substr($valuesSimple, 0, -2);
 		
-		echo "<p><b>Total pushes:</b> ".$totalPushes."</p>";
+		//echo "<p><b>Total pushes:</b> ".$totalPushes."</p>";
 		//echo "<a href='#modalDelete'  role='button' class='btn' data-toggle='modal' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
-		echo "<p><b>Values:</b> ".$valuesBase64."</p>";
+		//echo "<p><b>Values:</b> ".$valuesBase64."</p>";
 		
-		echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal'><span class='fa fa-sliders'></span></a>";
-		echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal'><span class='fa fa-trash-o'></span></a>";
+		echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-trash-o'></span></a>";
+		echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-sliders'></span></a>";
+		echo "<a href='#modalInfo' title='More Information' role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-info-circle'></span></a>";
 			
-		
 		if ($totalPushes > 0) {
 			echo "<script>var connectionKeysList = '".implode(",", $connectionKeys)."';</script>";
 			echo "<script>var columnsNamesList = '".implode(",", $columnsNameArrBase64)."';</script>";
@@ -114,6 +114,7 @@
 			echo "		getData();";
 			echo "	};</script>";
 	?>
+								</h2>
 							</div>
 						</div>
 					</div>
@@ -163,8 +164,10 @@
 		$bodyModal = "<p>Are you sure you want to delete this View?</p>";
 		drawModal("modalDelete", "Delete View", $bodyModal, "deleteView();", "Yes", "No");
 		
+		drawInfoViewModal("modalInfo", base64_decode($name), $valuesBase64, $totalPushes);
+		
 		$sql = "select * from configurations as cf, views as vw ".
-				"where cf.id_client_view = vw.id AND vw.name LIKE '".$_REQUEST["view"]."'";
+				"where type LIKE 'view' AND cf.id_client_view = vw.id AND vw.name LIKE '".$_REQUEST["view"]."'";
 		$result = $conn->query($sql);
 
 		if ($result && $result->num_rows > 0) {

@@ -231,8 +231,8 @@
 				echo "<div style='width: 100%; height: 200px;'><br/>No data (at least in the last 24 hours)<br/><br/></div>";
 			}
 			
-			echo "<a href='#modalInfor-$clientKey' title='More Information' role='button' class='btn' data-toggle='modal'<script >+Info</a>";
 			echo "<input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./client.php?client=$clientKey\"' />";
+			echo "<a href='#modalInfor-$clientKey' title='More Information' role='button' class='btn' data-toggle='modal'<script >+Info</a>";
 			drawInfoModal("modalInfor-$clientKey", $clientsName[$i], $created[$i], $server, $connKey[$i], $aesKey[$i], $valuesBase64);
 			echo "</div></div></div>";
 			$i++;
