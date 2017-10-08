@@ -76,6 +76,7 @@
 					$aesKey[] = $row["aes_key"];
 				}
 			}
+			
 			$sql = "SELECT DISTINCT(name) FROM views ORDER BY name";
 			$result = $conn->query($sql);
 
@@ -233,7 +234,7 @@
 			
 			echo "<input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./client.php?client=$clientKey\"' />";
 			echo "<a href='#modalInfor-$clientKey' title='More Information' role='button' class='btn' data-toggle='modal'<script >+Info</a>";
-			drawInfoModal("modalInfor-$clientKey", $clientsName[$i], $created[$i], $server, $connKey[$i], $aesKey[$i], $valuesBase64);
+			drawInfoModal("modalInfor-$clientKey", $clientsName[$i], $created[$i], $server, $connKey[$i], $aesKey[$i], $valuesBase64, null, null);
 			echo "</div></div></div>";
 			$i++;
 		}

@@ -141,10 +141,14 @@
 					"<p><b>Server:</b> $server</p>".
 					"<p><b>Connection key:</b> $connKey</p>".
 					"<p><b>AES key:</b> $aesKey</p>".
-					"<p><b>Values:</b> $valuesBase64</p>".
-					"<p><b>Total pushes:</b> $totalPushes</p>".
-					"<p><b>Last push:</b> $lastPush</p>".
-				"</div>";
+					"<p><b>Values:</b> $valuesBase64</p>";
+					
+		if($totalPushes != null)
+			$body .= "<p><b>Total pushes:</b> $totalPushes</p>";
+		if($lastPush != null)
+			$body .= "<p><b>Last push:</b> $lastPush</p>";
+		
+		$body .= "</div>";
 		drawModal($modalName, "\"".$name."\" Information", $body, null, null, "OK");
 	}
 	
