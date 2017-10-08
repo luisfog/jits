@@ -96,7 +96,7 @@
 	else
 		echo "<li>";
 ?>
-						<a href="https://github.com/luisfog/jits" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
+						<a href="https://github.com/luisfog/jits/tree/master/libraries" target="blank" title="Download Libraries"><span class="fa fa-download"></span></a>
 					</li>
 					<li>
 						<a href="./server/logout.php" title="Logout"><span class="fa fa-sign-out"></span></a>
