@@ -1,5 +1,5 @@
 <?php
-	//ini_set('display_errors', '0');
+	ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ./login.html' );
@@ -45,6 +45,8 @@
 		if(file_exists('./update/version')){
 			$versionServer = file_get_contents('./update/version');
 		}
+		
+		echo $versionServer;
 		
 		if(compareVersions($versionGit, $versionServer)){
 	?>

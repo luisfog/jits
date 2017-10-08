@@ -1,10 +1,4 @@
 <?php
-	ini_set('display_errors', '0');
-	session_start();
-	if(!isset($_SESSION['name'])){
-		header('Location: ./login.html' );
-		return;
-	}
 	header('Location: ./index.php');
 	
 	$url = 'https://github.com/luisfog/jits/archive/master.zip';
@@ -45,28 +39,7 @@
 	deleteDirectory("./updateZIP");
 	unlink("master.zip");
 	
-	$handle = fopen("./update/deletedFiles.txt", "r");
-	if ($handle) {
-		while (($line = fgets($handle)) !== false) {
-			if($line[strlen($line)-1] == "/")
-				deleteDirectory($line);
-			else
-				unlink($line);
-		}
-		fclose($handle);
-	}
 	unlink("./update/deletedFiles.txt");
-	
-	require("./server/database.php");
-	$conn = getConnectionFront();
-	
-	$handle = fopen("./update/databaseUpdates.txt", "r");
-	if ($handle) {
-		while (($line = fgets($handle)) !== false) {
-			$conn->query($line);
-		}
-		fclose($handle);
-	}
 	unlink("./update/databaseUpdates.txt");
 	
 	function recurse_copy($src,$dst) { 
