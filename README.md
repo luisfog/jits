@@ -12,7 +12,8 @@ Public web server with:
 ### Installation and Configuration
 
 ```
-1. Clone the repository to your server
+1. Just create a folder in your server and copy the index.php file (the one in the repository root) to your folder
+NOTE: yes, you just need the index.php file, this file will later download the website from the repository
 ```
 ```
 if you don't have mysql root user privileges
