@@ -1,5 +1,5 @@
 <?php
-	ini_set('display_errors', '0');
+	//ini_set('display_errors', '0');
 	session_start();
 	if(!isset($_SESSION['name'])){
 		header('Location: ./login.html' );
@@ -47,7 +47,16 @@
 								<select id="clientsList" style="width:100%;padding:14px;" onchange="changeValues();">
 									<option value="-">Select a client</option>
 	<?php
-		echo $clientOptions;
+		$conn = getConnectionFront();
+		$sql = "SELECT * FROM clients ORDER BY name";
+		$result = $conn->query($sql);
+		$clientOptions = "";
+
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				echo "<option value='".$row["connection_key"]."'>".base64_decode($row["name"])."</option>";
+			}
+		}
 	?>
 								</select>
 							</div>
