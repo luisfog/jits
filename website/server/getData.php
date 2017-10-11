@@ -73,7 +73,7 @@
 			return;
 		}
 		
-		$result = $conn->query($sql);
+		$result = $conn->query($sql." ORDER BY creation");
 		
 		if($result){
 			while($entry = $result->fetch_assoc()) {
