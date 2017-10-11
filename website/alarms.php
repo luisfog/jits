@@ -109,7 +109,10 @@
 	
 	<?php
 		$bodyModal = "<p>Are you sure you want to delete this Alarm?</p>";
-		drawModal("modalDelete", "Delete Alarm", $bodyModal, "deleteClient();", "Yes", "No");
+		drawModal("modalDelete", "Delete Alarm", $bodyModal, "deleteAlarm();", "Yes", "No");
+		
+		$bodyModal = "<p>Your alarm was created.</p>";
+		drawOkModal("modalCreated", "Alarm Created", $bodyModal, "OK")
 	?>
 	
     <script src="js/jquery.min.js"></script>

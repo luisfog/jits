@@ -71,8 +71,7 @@
 			}
 		}
 		
-		echo base64_decode($name)."</b>";//</h2></div>";
-		//echo "<div class='col-xl-6 col-lg-6 col-md-6'>";
+		echo base64_decode($name)."</b>";
 		
 		for($j = 0; $j<$i; $j++){
 			$sql = "SELECT COUNT(".$valuesName[$j].") AS num FROM client_".$connectionKeys[$j];
@@ -91,10 +90,6 @@
 		$valuesBase64 = substr($valuesBase64, 0, -2);
 		$valuesBase64Simple = substr($valuesBase64Simple, 0, -2);
 		$valuesSimple = substr($valuesSimple, 0, -2);
-		
-		//echo "<p><b>Total pushes:</b> ".$totalPushes."</p>";
-		//echo "<a href='#modalDelete'  role='button' class='btn' data-toggle='modal' style='float:right;cursor: pointer;'><span class='fa fa-trash-o'></span></a>";
-		//echo "<p><b>Values:</b> ".$valuesBase64."</p>";
 		
 		echo "<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-trash-o'></span></a>";
 		echo "<a href='#modalSettings' title='Client Settings' role='button' class='btn' data-toggle='modal' style='float: right;'><span class='fa fa-sliders'></span></a>";

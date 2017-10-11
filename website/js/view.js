@@ -203,7 +203,7 @@ function getData(){
 						seriesArr[i] = {
 									name: valuesArr[i],
 									type: 'line',
-									sampling: 'average',
+									sampling: 'max',
 									data: dataArr[i],
 									markPoint: {
 										data: [

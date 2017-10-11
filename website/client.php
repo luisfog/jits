@@ -55,10 +55,9 @@
 			$client = $result->fetch_assoc();
 			
 			$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
+			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/";
 			
-			echo base64_decode($client["name"])."</b> ";//</h2><br/></div>";
-			//echo "<div class='col-xl-12 col-lg-12 col-md-12'>";
+			echo base64_decode($client["name"])."</b> ";
 			
 			$name = base64_decode($client["name"]);
 			$created = $client["creation"];
@@ -77,14 +76,12 @@
 		if ($result && $result->num_rows > 0) {
 			
 			$numberRows = $result->fetch_assoc();
-			//echo "<p><b>Total pushes:</b> ".$numberRows["num"]."</p>";
 			$totalPushes = $numberRows["num"];
 			
 			$sql = "SELECT * FROM client_".$_REQUEST["client"]." ORDER BY creation DESC LIMIT 1";
 			$result = $conn->query($sql);
 			$lastRow = $result->fetch_assoc();
 			
-			//echo "<p><b>Last push:</b> ".$lastRow['creation']."</p>";
 			$lastPush = $lastRow['creation'];
 			
 			$values = "";
@@ -179,9 +176,9 @@
 				if($row["yyMax"] == "-1")
 					$row["yyMax"] = "";
 				drawSettingsModal($name, "modalExport", "saveData();", $row["dataset"],
-								$row["datasetType"], $row["yyMin"], $row["yyMax"], $row["avgOn"], $row["valuesS"], $values, $valuesBase64);
+								$row["datasetType"], $row["yyMin"], $row["yyMax"], $row["avgOn"], $row["deleteData"], $row["valuesS"], $values, $valuesBase64);
 			}else{
-				drawSettingsModal($name, "modalExport", "saveData();", "", "", "", "", "", $values, $values, $valuesBase64);
+				drawSettingsModal($name, "modalExport", "saveData();", "", "", "", "", "", "", $values, $values, $valuesBase64);
 			}
 		}
 	?>

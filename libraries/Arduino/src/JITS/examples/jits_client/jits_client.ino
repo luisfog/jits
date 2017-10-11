@@ -13,7 +13,7 @@
 #include <Ethernet.h>
 
 //Initiate jits in port 80
-Jits jits("http://yourserver/publisher.php", 80,
+Jits jits("http://yourserver/", 80,
           "your connection key", "your aes key");
 
 String names[2];

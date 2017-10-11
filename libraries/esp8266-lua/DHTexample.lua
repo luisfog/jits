@@ -16,7 +16,7 @@ function loop()
     local status, temp, humi, temp_dec, humi_dec = dht.read(7)
 
 	-- JITS variables
-    local server = "http://yourserver/publisher.php"
+    local server = "http://yourserver/"
     local connectionKey = "your connection key"
     local aesKey = "your aes key"
     

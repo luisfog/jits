@@ -58,7 +58,7 @@
 			$clientsName = array();
 			$created = array();
 			$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/publisher.php";
+			$actual_link = substr($actual_link, 0, strrpos($actual_link, "/"))."/";
 			$server = $actual_link;
 			$connKey = array();
 			$aesKey = array();
@@ -93,6 +93,7 @@
 				
 	<?php
 		if($init){
+			if(sizeOf($views) > 0){
 	?>
 				<div class="row">
 					<div class='col-12' style="padding:15px;">
@@ -101,7 +102,7 @@
 				</div>
 				<div class="row">
 	<?php
-		
+			}
 		$i = 0;
 		foreach ($views as &$view) {
 			$sql = "SELECT * FROM views WHERE name LIKE '$view'";
@@ -158,13 +159,11 @@
 			}
 			
 			echo "<p><input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./view.php?view=$view\"' />";
-			echo "</div></div></div>";
+			echo "</div></div></div></div>";
 			$i++;
 		}
 	?>
-					
-				</div>
-				
+	
 				<div class="row">
 					<div class='col-12' style="padding:15px;">
 						<h3 style="font-weight: 900;color:#003e7d;">Clients</h3>

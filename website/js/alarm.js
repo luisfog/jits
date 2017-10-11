@@ -3,23 +3,20 @@ window.onload = function() {
 	updateAlarmsList();
 };
 
-function deleteAlarmConfirmation(ele){
-	document.getElementById("modalYesButton").onclick = function() { deleteAlarm(ele.id); };
-	document.getElementById("modalDelete").style.display = "block";
-}
-
-function deleteAlarm(alarmName){
+var alarmName_delete;
+function deleteAlarm(){
 	$.ajax({
 		method: "POST",
 		url: "./server/deleteAlarm.php",
-		data: { name: alarmName },
+		data: { name: alarmName_delete },
 		statusCode: {
 			200: function (response) {
 				updateAlarmsList();
-				document.getElementById("modalDelete").style.display = "none";
+				$('#modalDelete').modal('toggle');
 			},
 			500: function (response) {
 				alert("The view could not be deleted, please try again later.");
+				$('#modalDelete').modal('toggle');
 			}
 		}
 	});
@@ -74,6 +71,7 @@ function createAlarm(name_ui){
 		return;
 	}
 	
+	
 	$.ajax({
 		method: "POST",
 		url: "./server/registerAlarm.php",
@@ -82,6 +80,16 @@ function createAlarm(name_ui){
 				timeExecution: timeExecution_ui},
 		statusCode: {
 			200: function (response) {
+				document.getElementById("name").value = "";
+				document.getElementById("clientsList").selectedIndex = 0;
+				document.getElementById("valuesList").selectedIndex = 0;
+				document.getElementById("conditionsList").selectedIndex = 0;
+				document.getElementById("target").value = "";
+				document.getElementById("timeExecutionList").selectedIndex = 0;
+				document.getElementById("timeExecution").value = "";
+				
+				$('#modalCreated').modal('toggle');
+				
 				updateAlarmsList();
 			},
 			500: function (response) {
@@ -140,25 +148,35 @@ function updateAlarmsList(){
 					else
 						new_alarm_block_time.innerHTML = "Alarm after " + response[i].time_target + " minutes";
 					
-					var new_alarm_block_delete = document.createElement('p');
-					var new_alarm_block_delete_input = document.createElement('button');
-					new_alarm_block_delete_input.className = "buttonDelete";
-					new_alarm_block_delete_input.id = response[i].name;
-					new_alarm_block_delete_input.onclick = function() { deleteAlarmConfirmation(this); };
-					new_alarm_block_delete_input.innerHTML = "Delete Alarm";
+					var new_alarm_delete = document.createElement('a');
+					new_alarm_delete.href = '#modalDelete';
+					new_alarm_delete.title  = 'Delete Client';
+					new_alarm_delete.setAttribute('role', 'button');
+					new_alarm_delete.className  = 'btn';
+					new_alarm_delete.setAttribute('data-toggle', 'modal');
+					new_alarm_delete.style.cssFloat = "right";
+					new_alarm_delete.style.margin = "-6px 0px 0px 0px";
+					new_alarm_delete.id = response[i].name;
+					new_alarm_delete.onclick = function() { changeAlarmNameDelete(this)};
+					var new_alarm_delete_span = document.createElement('span');
+					new_alarm_delete_span.className = "fa fa-trash-o";
+					new_alarm_delete.appendChild(new_alarm_delete_span);
+					new_alarm_block_time.appendChild(new_alarm_delete);
 					
 					new_alarm_block.appendChild(new_alarm_block_title);
 					new_alarm_block.appendChild(new_alarm_block_condition);
 					new_alarm_block.appendChild(new_alarm_block_client);
 					new_alarm_block.appendChild(new_alarm_block_time);
-					new_alarm_block_delete.appendChild(new_alarm_block_delete_input);
-					new_alarm_block.appendChild(new_alarm_block_delete);
 					new_alarm.appendChild(new_alarm_block);
 					alarms.appendChild(new_alarm);
 				}
 			}
 		}
 	});
+}
+
+function changeAlarmNameDelete(ele){
+	alarmName_delete = ele.id;
 }
 
 function changeValues(){

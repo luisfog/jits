@@ -7,7 +7,7 @@ public class Tester {
 
 	public static void main(String[] args) {
 		
-		Jits jits = new Jits("http://yourserver/publisher.php",
+		Jits jits = new Jits("http://yourserver/",
 				"your connection key",
 				"your aes key");		
 		

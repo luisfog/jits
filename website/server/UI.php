@@ -24,14 +24,14 @@
 	require("./server/database.php");
 	$conn = getConnectionFront();
 		
-	if($selectedMenu == "Home")
+	/*if($selectedMenu == "Home")
 		echo "<li class=\"active\">";
 	else
 		echo "<li>";
-?>
+
 						<a href="./index.php">Home</a>
-					</li>
-<?php
+					</li>*/
+
 	if($selectedMenu == "Clients")
 		echo "<li class=\"dropdown active\">";
 	else
@@ -160,8 +160,9 @@
 		drawModal($modalName, "\"".$name."\" Information", $body, null, null, "OK");
 	}
 	
-	function drawSettingsModal($name, $modalExportTarget, $okFunction, $dataSelect, $dataTypeSelect,
-								$yyMin, $yyMax, $avgSelect, $valuesSel, $values, $valuesBase64){
+	function drawSettingsModal($name, $modalExportTarget, $okFunction, $dataSelect,
+								$dataTypeSelect, $yyMin, $yyMax, $avgSelect,
+								$dltSelect, $valuesSel, $values, $valuesBase64){
 					
 		$body = "<div>".
 				"<p><b>Dataset</b></p>".
@@ -249,7 +250,27 @@
 		else
 			$body .= "<option value='avgOff'>Hide AVG line</option>";
 		
-		$body .= "</select><hr/><p><b>Export Data</b></p>".
+		$body .= "</select><hr/><p><b>Delete data </b></p><select id='deleteSelect' style='width:100%;padding:14px;'>";
+		
+		if($dltSelect == "never")
+			$body .= "<option value='never' selected>Never delete the data</option>";
+		else
+			$body .= "<option value='never'>Never delete the data</option>";
+		if($dltSelect == "year")
+			$body .= "<option value='year' selected>(READ THE NOTE) Delete data with more than 1 year</option>";
+		else
+			$body .= "<option value='year'>(READ THE NOTE) Delete data with more than 1 year</option>";
+		if($dltSelect == "month")
+			$body .= "<option value='month' selected>(READ THE NOTE) Delete data with more than 1 month</option>";
+		else
+			$body .= "<option value='month'>(READ THE NOTE) Delete data with more than 1 month</option>";
+		if($dltSelect == "week")
+			$body .= "<option value='week' selected>(READ THE NOTE) Delete data with more than 1 week</option>";
+		else
+			$body .= "<option value='week'>(READ THE NOTE) Delete data with more than 1 week</option>";
+		
+		$body .= "</select><br/><br/><b style='color:red'>NOTE:</b> this is a permanent delete without recovery!";
+		$body .= "<hr/><p><b>Export Data</b></p>".
 				"<input type='button' data-dismiss=\"modal\" style='width:100%;height:47px;' value='Export' class='btn-export' data-toggle='modal' data-target='#$modalExportTarget' />".
 				"</div>";
 		

@@ -111,6 +111,7 @@ function getData(){
 			for(var i=0; i<valuesArr.length; i++){
 				dataArr[i] = [];
 			}
+			updateChartSettingsEmp();
 		}
 	}else{
 		stop = true;
@@ -124,6 +125,7 @@ function getData(){
 		for(var i=0; i<valuesArr.length; i++){
 			dataArr[i] = [];
 		}
+		updateChartSettingsEmp();
 	}
 	
 	if(dataLong_ui.selectedIndex == 0 && labels.length > 0)
@@ -185,7 +187,7 @@ function getData(){
 						seriesArr[i] = {
 									name: valuesArr[i],
 									type: 'line',
-									sampling: 'average',
+									sampling: 'max',
 									data: dataArr[i],
 									markPoint: {
 										data: [
@@ -205,7 +207,8 @@ function getData(){
 					options.series = seriesArr;
 					myChart.setOption(options);
 					
-					updateChartSettingsEmp();
+					if(firstReal)
+						updateChartSettingsEmp();
 					
 				}else if(arr.length > 0){
 					for(var i=0; i<dataArr.length; i++){
@@ -321,6 +324,10 @@ function saveData(){
 	
 	var values = $('#selectValues').val();
 	
+	var avgSelectI = document.getElementById("avgSelect").value;
+	
+	var dltSelectI = document.getElementById("deleteSelect").value;
+	
 	var valuesSI = "";
 	if(values != null){
 		for(var i=0; i<values.length-1; i++)
@@ -339,7 +346,8 @@ function saveData(){
 			valuesS: valuesSI,
 			yyMin: yyMinI,
 			yyMax: yyMaxI,
-			avgSelect: avgSelectI
+			avgSelect: avgSelectI,
+			dltSelect: dltSelectI
 			},
 		statusCode: {
 			200: function (response) {

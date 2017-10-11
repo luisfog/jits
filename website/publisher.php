@@ -321,6 +321,34 @@
 				VALUES ('".date('Y-m-d H:i:s')."', $values)";
 				
 		if ($conn->query($sql) === TRUE) {
+			
+			$sql = "select deleteData from configurations as cf, clients as cl ".
+					"where cf.type LIKE 'client' AND cf.id_client_view = cl.id AND cl.connection_key LIKE '".$_GET['con']."'";
+			$result = $conn->query($sql);
+
+			if ($result && $result->num_rows > 0) {
+				$row = $result->fetch_assoc();
+				$sql = "";
+				if($row["deleteData"] == "year"){
+					$sql = "DELETE FROM client_".$_GET['con']." ".
+							"WHERE creation < DATE_SUB('".date('Y-m-d H:i:s')."', INTERVAL 1 YEAR)";
+				}
+				if($row["deleteData"] == "month"){
+					$sql = "DELETE FROM client_".$_GET['con']." ".
+							"WHERE creation < DATE_SUB('".date('Y-m-d H:i:s')."', INTERVAL 1 MONTH)";
+				}
+				if($row["deleteData"] == "week"){
+					$sql = "DELETE FROM client_".$_GET['con']." ".
+							"WHERE creation < DATE_SUB('".date('Y-m-d H:i:s')."', INTERVAL 1 WEEK)";
+				}
+				if($sql != ""){
+					if ($conn->query($sql) !== TRUE) {
+						include("./server/logs.php");
+						insertToLog("publisher.php", "Error creating client table: " . $conn->error);
+					}
+				}
+			}
+			
 			header("HTTP/1.1 200 OK");
 			echo "Data saved successfully";
 			return;

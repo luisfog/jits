@@ -9,7 +9,8 @@
 	if( isset($_POST['type']) && isset($_POST['target']) &&
 		isset($_POST['dataSelect']) && isset($_POST['dataTypeSelect']) &&
 		isset($_POST['valuesS']) && isset($_POST['yyMin']) &&
-		isset($_POST['yyMax']) && isset($_POST['avgSelect']) ){
+		isset($_POST['yyMax']) && isset($_POST['avgSelect']) &&
+		isset($_POST['dltSelect']) ){
 		
 		$type = $_POST['type'];
 		$target = $_POST['target'];
@@ -27,6 +28,7 @@
 			$avgSelect = "1";
 		else
 			$avgSelect = "0";
+		$dltSelect = $_POST['dltSelect'];
 		
 		require("./database.php");
 		$conn = getConnectionBack();
@@ -43,7 +45,7 @@
 		if ($result && $result->num_rows > 0) {
 			$row = $result->fetch_assoc();
 			$sql = "UPDATE configurations SET dataset='$dataSelect', datasetType='$dataTypeSelect',
-					valuesS='$values', yyMin=$yyMin, yyMax=$yyMax, avgOn=$avgSelect
+					valuesS='$values', yyMin=$yyMin, yyMax=$yyMax, avgOn=$avgSelect, deleteData='$dltSelect'
 					WHERE id='".$row["id"]."'";
 			
 			if ($conn->query($sql) === TRUE) {
@@ -62,14 +64,14 @@
 		}else{
 			if($type == "client"){
 				$sql = "INSERT INTO configurations (type, id_client_view, dataset, datasetType, ".
-													"valuesS, yyMin, yyMax, avgOn) ".
+													"valuesS, yyMin, yyMax, avgOn, deleteData) ".
 						"VALUES ('$type', (SELECT id FROM clients where connection_key LIKE '$target'), ".
-								"'$dataSelect', '$dataTypeSelect', '$values', $yyMin, $yyMax, $avgSelect)";
+								"'$dataSelect', '$dataTypeSelect', '$values', $yyMin, $yyMax, $avgSelect, '$dltSelect')";
 			}else{
 				$sql = "INSERT INTO configurations (type, id_client_view, dataset, datasetType, ".
-													"valuesS, yyMin, yyMax, avgOn) ".
+													"valuesS, yyMin, yyMax, avgOn, deleteData) ".
 						"VALUES ('$type', (SELECT id FROM views where name LIKE '$target' LIMIT 1), ".
-								"'$dataSelect', '$dataTypeSelect', '$values', $yyMin, $yyMax, $avgSelect)";
+								"'$dataSelect', '$dataTypeSelect', '$values', $yyMin, $yyMax, $avgSelect, '$dltSelect')";
 			}
 			
 			if ($conn->query($sql) === TRUE) {
