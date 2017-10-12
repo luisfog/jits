@@ -112,6 +112,8 @@ Access the server (e.g. www.myJits.com)
 
 [multiple-select](https://github.com/wenzhixin/multiple-select)
 
+[nodemcu-firmware](https://github.com/nodemcu/nodemcu-firmware)
+
 ## Licenses
 
 This project is licensed under the MIT License
