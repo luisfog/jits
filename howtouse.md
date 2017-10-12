@@ -22,4 +22,3 @@ For instance, the temperature is higher than 25ºC.
 #
 Have fun and enjoy!
 
-#### Luis Gomes
