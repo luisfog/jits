@@ -39,7 +39,7 @@ if you don't have mysql root user privileges
 
 ## Start sending data
 
-0. Access the server (e.g. www.myJits.com)
+Access the server (e.g. www.myJits.com)
 
 1. On the Clients menu choose "Add client"
 
@@ -56,7 +56,7 @@ if you don't have mysql root user privileges
 
 ## Creating your own connection (without a library)
 
-0. Access the server (e.g. www.myJits.com)
+Access the server (e.g. www.myJits.com)
 
 1. Create a client
 
@@ -97,6 +97,8 @@ if you don't have mysql root user privileges
    e.g. www.myJits.com/publisher.php?con=16f90df23806278df65eaa052faba8
 
 9. Go to the server and see your data
+
+##[HOW TO USE](howtouse)
 
 ## GitHub projects used
 
