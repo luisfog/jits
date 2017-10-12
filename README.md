@@ -114,7 +114,7 @@ if you don't have mysql root user privileges
 
 This project is licensed under the MIT License
 
-The license of this project and the GitHub projects used can be found in [licenses](licenses) folder
+The license of this project and the ones of the GitHub projects used can be found in [licenses](licenses) folder
 
 #
 Have fun and enjoy!
