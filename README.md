@@ -100,15 +100,15 @@ if you don't have mysql root user privileges
 
 ## GitHub projects used
 
-[https://github.com/ecomfe/echarts](echarts)
+[echarts](https://github.com/ecomfe/echarts)
 
-[https://github.com/abmantis/homeassistant-jitshistory](homeassistant-jitshistory)
+[homeassistant-jitshistory](https://github.com/abmantis/homeassistant-jitshistory)
 
-[https://github.com/spaniakos/AES/](AES Encryption Library for Arduino and Raspberry Pi)
+[AES Encryption Library for Arduino and Raspberry Pi](https://github.com/spaniakos/AES)
 
-[https://github.com/adamvr/arduino-base64](arduino-base64)
+[arduino-base64](https://github.com/adamvr/arduino-base64)
 
-[https://github.com/wenzhixin/multiple-select/](multiple-select)
+[multiple-select](https://github.com/wenzhixin/multiple-select)
 
 ## Licenses
 
