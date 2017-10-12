@@ -13,8 +13,8 @@ Public web server with:
 
 ```
 1. Create a folder in your server and do one of the below:
- - clone the website folder of this repository to your server;
- - OR copy the index.php file (the one in the repository root) to your server *.
+ - clone the website folder of this repository to your server
+ - OR copy the index.php file (the one in the repository root) to your server *
 ```
 NOTE*: yes, you just need the index.php file, this file will later download the website from the repository
 ```
@@ -25,7 +25,7 @@ if you don't have mysql root user privileges you need to do an extra step:
 2. Access index.php (e.g. www.myJits.com/index.php)
 ```
 ```
-3. Fill all the fields
+3. Fill all the fields **
 ```
 ```
 if you don't have mysql root user privileges
@@ -33,8 +33,11 @@ if you don't have mysql root user privileges
 ```
 
 #### Notes
-1. The user name and password is mandatory for server access
-2. The email is required for alarms (to warn the user)
+note * - yes, you just need the index.php file, this file will later download the website from the repository
+
+note ** - The user name and password is mandatory for server access
+
+note ** - The email is required for alarms (to warn the user)
 
 ## Start sending data
 
