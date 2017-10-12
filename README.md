@@ -98,7 +98,7 @@ Access the server (e.g. www.myJits.com)
 
 9. Go to the server and see your data
 
-##[HOW TO USE](howtouse)
+## [HOW TO USE](howtouse.md)
 
 ## GitHub projects used
 
