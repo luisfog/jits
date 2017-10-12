@@ -14,7 +14,7 @@ Public web server with:
 ```
 1. Create a folder in your server and do one of the below:
  - clone the website folder of this repository to your server
- - OR copy the index.php file (the one in the repository root) to your server *
+ - OR copy the index.php file (the one in the repository root) to your server (note 1)
 ```
 NOTE*: yes, you just need the index.php file, this file will later download the website from the repository
 ```
@@ -25,7 +25,7 @@ if you don't have mysql root user privileges you need to do an extra step:
 2. Access index.php (e.g. www.myJits.com/index.php)
 ```
 ```
-3. Fill all the fields **
+3. Fill all the fields (notes 2 and 3)
 ```
 ```
 if you don't have mysql root user privileges
@@ -33,56 +33,88 @@ if you don't have mysql root user privileges
 ```
 
 #### Notes
-note * - yes, you just need the index.php file, this file will later download the website from the repository
-
-note ** - The user name and password is mandatory for server access
-
-note ** - The email is required for alarms (to warn the user)
+1. yes, you just need the index.php file, this file will later download the website from the repository
+2. The user name and password is mandatory for server access
+3. The email is required for alarms (to warn the user)
 
 ## Start sending data
 
 0. Access the server (e.g. www.myJits.com)
 
-1. Create a client
+1. On the Clients menu choose "Add client"
 
-2. Copy and save the "Server", "Connection key", "AES key" and "AES iv"
+2. Give a name to your client (is recommended to stay with AES-128 and Publisher type)
 
-3. Use one of the provided [libraries](libraries)
+2. Copy and save the "Server", "Connection key" and "AES key"
 
-4. Initiate the library with your "Server", "Connection key", "AES key" and "AES iv"
+3. Use one of the provided [libraries](libraries) or the [https://github.com/abmantis/homeassistant-jitshistory](Home Assistant componente)
+
+4. Initiate the library with your "Server", "Connection key" and "AES key"
 
 5. Send JSON data (the server will configure and create the database automatically)
 
 
-## Creating you own connection (without a library)
+## Creating your own connection (without a library)
 
 0. Access the server (e.g. www.myJits.com)
 
 1. Create a client
 
-2. Copy and save the "Server", "Connection key", "AES key" (base64) and "AES iv" (base64)
+2. Copy and save the "Server", "Connection key" and "AES key" (base64)
 
-3. In your code, develop an AES encryption function
+3. Get the iv for AES
 
-4. In your code, create a JSON message with your values (double variables) to send (without timestamp)
+   3.1 Send a HTTP GET request to generatorIV.php with your client connection key
+   
+   e.g. www.myJits.com/generatorIV.php?con=16f90df23806278df65eaa052faba8
+   
+   3.2 Store the AES iv you received (base64) - the iv expires within 5 minutes
+
+4. In your code, develop an AES encryption function
+
+5. In your code, create a JSON message with your values (double variables) to send (without timestamp)
 
    e.g. {"value1" : "12.4", "value2" : "5.9"}
 
-5. In your code, encript your JSON message with your "AES key" and "AES iv"
+6. In your code, encrypt your JSON message with your "AES key" and "AES iv"
 
-   5.1. Encode your JSON to base64
+7. Encode your encrypted JSON to Base64 (usually the encryption already results in a bse64 string)
 
-6. In your code, send a HTTP POST request for "Server"?con="Connection key"
+   e.g. 
+   
+   Input JSON: {"value1" : "12.4", "value2" : "5.9"}
+   
+   Input AES iv: rtvN9B/PJrQotOF0GWUZ5A==
+   
+   Expected result: t46nm7o0Sgn1FNcRGcAOk6g64xsntK9G3Tq8jeAfyJcTaccrn5y2Zf7Wc55qGvYn
+
+8. Publish your new data
+
+   8.1 Send a HTTP POST request to publisher.php with your client connection key
+
+   8.1. Put your encripted JSON in the HTTP POST request body
 
    e.g. www.myJits.com/publisher.php?con=16f90df23806278df65eaa052faba8
 
-   6.1. Put your encripted JSON in the HTTP POST request body
+9. Go to the server and see your data
 
-7. Go to the server and see you data
+## GitHub projects used
 
-## License
+[https://github.com/ecomfe/echarts](echarts)
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+[https://github.com/abmantis/homeassistant-jitshistory](homeassistant-jitshistory)
+
+[https://github.com/spaniakos/AES/](AES Encryption Library for Arduino and Raspberry Pi)
+
+[https://github.com/adamvr/arduino-base64](arduino-base64)
+
+[https://github.com/wenzhixin/multiple-select/](multiple-select)
+
+## Licenses
+
+This project is licensed under the MIT License
+
+The license of this project and the GitHub projects used can be found in [licenses](licenses) folder
 
 #
 Have fun and enjoy!
