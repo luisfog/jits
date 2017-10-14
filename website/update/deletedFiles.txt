@@ -1,1 +1,2 @@
 ./fonts/
+./jits_logs.php

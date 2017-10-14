@@ -21,18 +21,18 @@
 			header("HTTP/1.1 200 OK");
 			return;
 		} else {
-			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error updating.";
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("updateMail.php", "Error updating: " . $conn->error);
+			$conn->close();
 			return;
 		}
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("updateMail.php", "Wrong GET request parameters.");
 	return;
 ?>

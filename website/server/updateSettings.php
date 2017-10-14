@@ -54,11 +54,11 @@
 				echo "Settings updated";
 				return;
 			} else {
-				$conn->close();
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error updating.";
 				include("./logs.php");
 				insertToLog("updateSettings.php", "Error updating: " . $conn->error);
+				$conn->close();
 				return;
 			}
 		}else{

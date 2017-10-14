@@ -19,7 +19,7 @@
 		if ($result->num_rows > 0) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Name already taken.";
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("checkName.php", "Name already taken.");
 			$conn->close();
 			return;
@@ -33,7 +33,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("checkName.php", "Wrong GET request parameters.");
 	return;
 ?>

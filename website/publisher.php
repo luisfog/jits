@@ -8,7 +8,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
 			include("./server/logs.php");
-			insertToLog("publisher.php", "Connection failed: " . $conn->connect_error);
+			insertToLogRoot("publisher.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -19,7 +19,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "No known client.";
 			include("./server/logs.php");
-			insertToLog("publisher.php", "The connection key is not in the database.");
+			insertToLogRoot("publisher.php", "The connection key is not in the database.");
 			return;
 		}
 		$client = $result->fetch_assoc();
@@ -30,7 +30,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "iv expired, please generate a new iv.";
 			include("./server/logs.php");
-			insertToLog("publisher.php", "The iv expired, please generate a new iv");
+			insertToLogRoot("publisher.php", "The iv expired, please generate a new iv");
 			return;
 		}
 		
@@ -43,7 +43,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error decoding JSON.";
 			include("./server/logs.php");
-			insertToLog("publisher.php", "Error decoding JSON.");
+			insertToLogRoot("publisher.php", "Error decoding JSON.");
 			return;
 		}
 		
@@ -52,7 +52,7 @@
 		$values = "";
 		foreach ($jsonArray as $key => $value) {
 			$key = str_replace('=', '', base64_encode($key));
-			$createValues .= "{$key} FLOAT(15,7) NOT NULL,";
+			$createValues .= "{$key} FLOAT(15,7),";
 			$insert .= "{$key},";
 			$values .= "'{$value}',";
 		}
@@ -72,7 +72,7 @@
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating client table.";
 				include("./server/logs.php");
-				insertToLog("publisher.php", "Error creating client table: " . $conn->error);
+				insertToLogRoot("publisher.php", "Error creating client table: " . $conn->error);
 				return;
 			}
 		}else{
@@ -96,18 +96,17 @@
 						}
 					}
 					if($newField){
-						$newColumns .= "ADD COLUMN {$key} FLOAT(15,7) NOT NULL,";
+						$newColumns .= "ADD COLUMN {$key} FLOAT(15,7),";
 					}
 				}
 				if($newColumns != ""){
 					$newColumns = substr($newColumns, 0, -1);
-					$sql = "ALTER TABLE client_".$_GET['con']." $newColumns;";
-					echo $sql;
-					if(!$conn->query($query)) {
+					$sql = "ALTER TABLE client_".$_GET['con']." $newColumns";
+					if(!$conn->query($sql)) {
 						header("HTTP/1.1 500 Internal Server Error");
 						echo "Error creating new columns.";
 						include("./server/logs.php");
-						insertToLog("publisher.php", "Error creating new columns: " . $conn->error);
+						insertToLogRoot("publisher.php", "Error creating new columns: " . $conn->error);
 						return;
 					}
 				}
@@ -344,7 +343,7 @@
 				if($sql != ""){
 					if ($conn->query($sql) !== TRUE) {
 						include("./server/logs.php");
-						insertToLog("publisher.php", "Error creating client table: " . $conn->error);
+						insertToLogRoot("publisher.php", "Error creating client table: " . $conn->error);
 					}
 				}
 			}
@@ -356,7 +355,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error inserting data: " . $conn->error;
 			include("./server/logs.php");
-			insertToLog("publisher.php", "Error inserting data in the table client_".$_GET['con'].": " . $conn->error);
+			insertToLogRoot("publisher.php", "Error inserting data in the table client_".$_GET['con'].": " . $conn->error);
 			return;
 		}
 	}
@@ -364,7 +363,7 @@
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
 	include("./server/logs.php");
-	insertToLog("publisher.php", "The get parameters are not right, you need to send the connection key.");
+	insertToLogRoot("publisher.php", "The get parameters are not right, you need to send the connection key.");
 	return;
 	
 	function fnDecrypt($input, $aesKey, $aesIV)

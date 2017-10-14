@@ -17,7 +17,7 @@
 		if ($conn->connect_error) {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("init.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
@@ -26,7 +26,7 @@
 			if( !isset($_POST['database'])){
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating MySQL information, missing parameters.";
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating MySQL information, missing parameters.");
 				return;
 			}
@@ -51,7 +51,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating database: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating database: " . $conn->error);
 				$conn->close();
 				return;
@@ -80,7 +80,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating user: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating user: " . $conn->error);
 				$conn->close();
 				return;
@@ -95,7 +95,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error granted permissions: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error granted permissions: " . $conn->error);
 				$conn->close();
 				return;
@@ -120,7 +120,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating clients table: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating clients table: " . $conn->error);
 				$conn->close();
 				return;
@@ -142,7 +142,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating views table: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating views table: " . $conn->error);
 				$conn->close();
 				return;
@@ -167,7 +167,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating views table: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating views table: " . $conn->error);
 				$conn->close();
 				return;
@@ -191,7 +191,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating alarms table: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating alarms table: " . $conn->error);
 				$conn->close();
 				return;
@@ -200,7 +200,7 @@
 			if( !isset($_POST['webUser']) || !isset($_POST['webPass']) || !isset($_POST['email']) || !isset($_POST['timezone'])){
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error inserting web user, missing parameters.";
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error inserting web user, missing parameters.");
 				return;
 			}
@@ -230,7 +230,7 @@
 				} else {
 					header("HTTP/1.1 500 Internal Server Error");
 					echo "Error inserting web user: " . $conn->error;
-					include("./server/logs.php");
+					include("./logs.php");
 					insertToLog("init.php", "Error inserting web user: " . $conn->error);
 					$conn->close();
 					return;
@@ -238,7 +238,7 @@
 			} else {
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error creating table for web users: " . $conn->error;
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("init.php", "Error creating table for web users: " . $conn->error);
 				$conn->close();
 				return;
@@ -254,7 +254,7 @@
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("init.php", "Wrong GET request parameters.");
 	return;
 ?>

@@ -8,7 +8,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Connection failed: " . $conn->connect_error;
 			include("./server/logs.php");
-			insertToLog("generatorIV.php", "Connection failed: " . $conn->connect_error);
+			insertToLogRoot("generatorIV.php", "Connection failed: " . $conn->connect_error);
 			return;
 		}
 		
@@ -19,7 +19,7 @@
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "No known client.";
 			include("./server/logs.php");
-			insertToLog("generatorIV.php", "Connection key is invalid: ".$_GET['con']);
+			insertToLogRoot("generatorIV.php", "Connection key is invalid: ".$_GET['con']);
 			return;
 		}
 		
@@ -39,17 +39,17 @@
 			echo $ivBase;
 			return;
 		} else {
-			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error updating.";
 			include("./server/logs.php");
-			insertToLog("generatorIV.php", "Error updating: " . $conn->error);
+			insertToLogRoot("generatorIV.php", "Error updating: " . $conn->error);
+			$conn->close();
 			return;
 		}
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
 	include("./server/logs.php");
-	insertToLog("generatorIV.php", "Wrong GET request parameters.");
+	insertToLogRoot("generatorIV.php", "Wrong GET request parameters.");
 	return;
 ?>

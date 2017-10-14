@@ -16,22 +16,33 @@
 		$sql = "DELETE FROM clients WHERE connection_key like'$connectionKey'";
 		
 		if ($conn->query($sql) === TRUE) {
-			$conn->close();
-			header("HTTP/1.1 200 OK");
-			return;
+			$sql = "DROP TABLE client_$connectionKey";
+		
+			if ($conn->query($sql) === TRUE) {
+				$conn->close();
+				header("HTTP/1.1 200 OK");
+				return;
+			} else {
+				header("HTTP/1.1 500 Internal Server Error");
+				echo "Error deleting.";
+				include("./logs.php");
+				insertToLog("deleteClient.php", "Error deleting: " . $conn->error);
+				$conn->close();
+				return;
+			}
 		} else {
-			$conn->close();
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error deleting.";
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("deleteClient.php", "Error deleting: " . $conn->error);
+			$conn->close();
 			return;
 		}
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("deleteClient.php", "Wrong GET request parameters.");
 	return;
 ?>

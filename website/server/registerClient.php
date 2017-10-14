@@ -26,7 +26,7 @@
 		} else {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error creating client: " . $conn->error;
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("registerClient.php", "Error creating client: " . $conn->error);
 			$conn->close();
 			return;
@@ -34,7 +34,7 @@
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("registerClient.php", "Wrong GET request parameters.");
 	return;
 ?>

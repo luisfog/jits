@@ -38,7 +38,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("getClientValues.php", "Wrong GET request parameters.");
 	return;
 ?>

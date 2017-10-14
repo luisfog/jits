@@ -68,7 +68,7 @@
 		}else{
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "'dataLong' parameter has a invalid value.";
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("getData.php", "'dataLong' parameter has a invalid value.");
 			return;
 		}
@@ -92,7 +92,7 @@
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("getData.php", "Wrong GET request parameters.");
 	return;
 ?>

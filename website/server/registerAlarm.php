@@ -34,7 +34,7 @@
 		} else {
 			header("HTTP/1.1 500 Internal Server Error");
 			echo "Error creating alarm: " . $conn->error;
-			include("./server/logs.php");
+			include("./logs.php");
 			insertToLog("registerAlarm.php", "Error creating alarm: " . $conn->error);
 			$conn->close();
 			return;
@@ -42,7 +42,7 @@
 	}
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown order.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("registerAlarm.php", "Wrong GET request parameters.");
 	return;
 ?>

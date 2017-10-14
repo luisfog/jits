@@ -40,7 +40,12 @@
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 jumbotron">
 							<div class='col-xl-12 col-lg-12 col-md-12'>
-								<h2><b>Logs</b></h2>
+							
+								<h2>
+									<b>Logs </b>
+									<a href='#modalDelete' title='Delete Client'  role='button' class='btn' data-toggle='modal'><span class='fa fa-trash-o'></span></a>
+								</h2>
+								
 							</div>
 							<br/>
 							<div class='col-xl-12 col-lg-12 col-md-12'>
@@ -57,6 +62,11 @@
 			</div>
 		</div>
 	</div>
+	
+	<?php
+		$bodyModal = "<p>Are you sure you want to clean all the logs?</p>";
+		drawModal("modalDelete", "Clean Logs", $bodyModal, "window.location = './server/cleanLogs.php';", "Yes", "No");
+	?>
 	
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

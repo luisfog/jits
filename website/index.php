@@ -159,11 +159,11 @@
 			}
 			
 			echo "<p><input type='button' value='View' class='btn btn-primary' onclick='window.location = \"./view.php?view=$view\"' />";
-			echo "</div></div></div></div>";
+			echo "</div></div></div>";
 			$i++;
 		}
 	?>
-	
+				</div>
 				<div class="row">
 					<div class='col-12' style="padding:15px;">
 						<h3 style="font-weight: 900;color:#003e7d;">Clients</h3>

@@ -31,26 +31,26 @@
 				header("HTTP/1.1 200 OK");
 				return;
 			} else {
-				$conn->close();
 				header("HTTP/1.1 500 Internal Server Error");
 				echo "Error updating.";
-				include("./server/logs.php");
+				include("./logs.php");
 				insertToLog("updatePassword.php", "Error updating: " . $conn->error);
+				$conn->close();
 				return;
 			}
 		}
 		
-		$conn->close();
 		header("HTTP/1.1 500 Internal Server Error");
 		echo "Error updating.";
-		include("./server/logs.php");
+		include("./logs.php");
 		insertToLog("updatePassword.php", "No user with that name");
+		$conn->close();
 		return;
 	}
 	
 	header("HTTP/1.1 500 Internal Server Error");
 	echo "Unknown inputs.";
-	include("./server/logs.php");
+	include("./logs.php");
 	insertToLog("updatePassword.php", "Wrong GET request parameters.");
 	return;
 ?>
