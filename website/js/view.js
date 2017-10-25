@@ -114,6 +114,7 @@ function getData(){
 				dataArr[i] = [];
 				dataArrKeys[i] = valuesArr[i];
 			}
+			updateChartSettingsEmp();
 		}
 	}else{
 		stop = true;
@@ -128,6 +129,9 @@ function getData(){
 			dataArr[i] = [];
 			dataArrKeys[i] = valuesArr[i];
 		}
+		if(options.series == null)
+			options.series = [];
+		updateChartSettingsEmp();
 	}
 	
 	if(dataLong_ui.selectedIndex == 0 && labels.length > 0)

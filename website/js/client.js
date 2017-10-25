@@ -125,6 +125,8 @@ function getData(){
 		for(var i=0; i<valuesArr.length; i++){
 			dataArr[i] = [];
 		}
+		if(options.series == null)
+			options.series = [];
 		updateChartSettingsEmp();
 	}
 	
