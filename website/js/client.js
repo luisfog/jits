@@ -209,8 +209,7 @@ function getData(){
 					options.series = seriesArr;
 					myChart.setOption(options);
 					
-					if(firstReal)
-						updateChartSettingsEmp();
+					updateChartSettingsEmp();
 					
 				}else if(arr.length > 0){
 					for(var i=0; i<dataArr.length; i++){
@@ -222,6 +221,7 @@ function getData(){
 						series: options.series,
 						xAxis:{ data: labels}
 					});
+
 				}
 				
 				if(load){

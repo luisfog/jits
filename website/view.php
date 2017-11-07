@@ -174,7 +174,7 @@
 			drawSettingsModal(base64_decode($name), "modalExport", "saveData();", $row["dataset"],
 							$row["datasetType"], $row["yyMin"], $row["yyMax"], $row["avgOn"], $row["valuesS"], $valuesSimple, $valuesBase64Simple);
 		}else{
-			drawSettingsModal(base64_decode($name), "modalExport", "saveData();", "", "", "", "", "", $valuesSimple, $valuesSimple, $valuesBase64Simple);
+			drawSettingsModal(base64_decode($name), "modalExport", "saveData();", "", "", "", "", "", "", $valuesSimple, $valuesSimple, $valuesBase64Simple);
 		}
 	?>
 	

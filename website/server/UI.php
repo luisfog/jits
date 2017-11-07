@@ -239,16 +239,16 @@
 		$body .= "<input id='yyMin' class='inputText' type='text' placeholder='Min Auto' value='$yyMin' />";
 		$body .= "<input id='yyMax' class='inputText' style='float: right;' type='text' placeholder='Max Auto' value='$yyMax' />";
 		
-		$body .= "<hr/><p><b>AVG line</b></p><select id='avgSelect' style='width:100%;padding:14px;'>";
+		$body .= "<hr/><p><b>Average line</b></p><select id='avgSelect' style='width:100%;padding:14px;'>";
 		
 		if($avgSelect == "1")
-			$body .= "<option value='avgOn' selected>Show AVG line</option>";
+			$body .= "<option value='avgOn' selected>Show Average line</option>";
 		else
-			$body .= "<option value='avgOn'>Show AVG line</option>";
+			$body .= "<option value='avgOn'>Show Average line</option>";
 		if($avgSelect == "0")
-			$body .= "<option value='avgOff' selected>Hide AVG line</option>";
+			$body .= "<option value='avgOff' selected>Hide Average line</option>";
 		else
-			$body .= "<option value='avgOff'>Hide AVG line</option>";
+			$body .= "<option value='avgOff'>Hide Average line</option>";
 		
 		$body .= "</select><hr/><p><b>Delete data </b></p><select id='deleteSelect' style='width:100%;padding:14px;'>";
 		
