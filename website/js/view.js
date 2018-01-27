@@ -331,15 +331,31 @@ function exportData(){
 	$('#modalExport').modal('toggle');
 }
 
+function applyData(){
+	var dataSelectI = document.getElementById("dataSelect").value;
+	var dataTypeSelectI = document.getElementById("dataTypeSelect").value;
+	var yyMinI = document.getElementById("yyMin").value;
+	var yyMaxI = document.getElementById("yyMax").value;
+	var values = $('#selectValues').val();
+	var avgSelectI = document.getElementById("avgSelect").value;
+
+	var valuesSI = "";
+	if(values != null){
+		for(var i=0; i<values.length-1; i++)
+			valuesSI += values[i] + ",";
+		valuesSI += values[values.length-1];
+	}
+	
+	updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI);
+	$('#modalSettings').modal('toggle');
+}
+
 function saveData(){
 	var dataSelectI = document.getElementById("dataSelect").value;
 	var dataTypeSelectI = document.getElementById("dataTypeSelect").value;
-	
 	var yyMinI = document.getElementById("yyMin").value;
 	var yyMaxI = document.getElementById("yyMax").value;
-	
 	var avgSelectI = document.getElementById("avgSelect").value;
-	
 	var values = $('#selectValues').val();
 	
 	var valuesSI = "";
@@ -369,9 +385,7 @@ function saveData(){
 					document.getElementById("dataLong").value = dataSelectI;
 					getData();
 				}
-	
 				updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI);
-				
 				$('#modalSettings').modal('toggle');
 			},
 			500: function (response) {

@@ -9,8 +9,7 @@
 	if( isset($_POST['type']) && isset($_POST['target']) &&
 		isset($_POST['dataSelect']) && isset($_POST['dataTypeSelect']) &&
 		isset($_POST['valuesS']) && isset($_POST['yyMin']) &&
-		isset($_POST['yyMax']) && isset($_POST['avgSelect']) &&
-		isset($_POST['dltSelect']) ){
+		isset($_POST['yyMax']) && isset($_POST['avgSelect']) ){
 		
 		$type = $_POST['type'];
 		$target = $_POST['target'];
@@ -28,7 +27,11 @@
 			$avgSelect = "1";
 		else
 			$avgSelect = "0";
-		$dltSelect = $_POST['dltSelect'];
+
+		$dltSelect = "never";
+		if(!(isset($_POST['dltSelect']))){
+			$dltSelect = $_POST['dltSelect'];
+		}
 		
 		require("./database.php");
 		$conn = getConnectionBack();
@@ -44,9 +47,17 @@
 
 		if ($result && $result->num_rows > 0) {
 			$row = $result->fetch_assoc();
-			$sql = "UPDATE configurations SET dataset='$dataSelect', datasetType='$dataTypeSelect',
-					valuesS='$values', yyMin=$yyMin, yyMax=$yyMax, avgOn=$avgSelect, deleteData='$dltSelect'
-					WHERE id='".$row["id"]."'";
+
+			if(isset($_POST['dltSelect'])){
+				$sql = "UPDATE configurations SET dataset='$dataSelect', datasetType='$dataTypeSelect',
+				valuesS='$values', yyMin=$yyMin, yyMax=$yyMax, avgOn=$avgSelect, deleteData='$dltSelect'
+				WHERE id='".$row["id"]."'";
+			}else{
+				$sql = "UPDATE configurations SET dataset='$dataSelect', datasetType='$dataTypeSelect',
+				valuesS='$values', yyMin=$yyMin, yyMax=$yyMax, avgOn=$avgSelect
+				WHERE id='".$row["id"]."'";
+			}
+			
 			
 			if ($conn->query($sql) === TRUE) {
 				$conn->close();

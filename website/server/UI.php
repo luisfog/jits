@@ -130,6 +130,30 @@
 			echo "</div>";
 		echo "</div>";
 	}
+
+	
+	function drawApplyModal($id, $title, $body, $applyFunction, $applyText, $okFunction, $okText, $cancelText){
+		echo "<div id=\"$id\" class=\"modal fade\" role=\"dialog\">";
+			echo "<div class=\"modal-dialog\">";
+				echo "<div class=\"modal-content\">";
+					echo "<div class=\"modal-header\">";
+						echo "<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>";
+						echo "<h3 class=\"modal-title\">$title</h3>";
+					echo "</div>";
+					echo "<div class=\"modal-body\" >";
+						echo "<p>$body</p>";
+					echo "</div>";
+					echo "<div class=\"modal-footer\">";
+						if($applyFunction != null)
+							echo "<button id=\"modalApplyButton\" type=\"button\" class=\"btn btn-export\" onclick=\"$applyFunction\" >$applyText</button>";
+						echo "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">$cancelText</button>";
+						if($okFunction != null)
+							echo "<button id=\"modalYesButton\" type=\"button\" class=\"btn btn-export\" onclick=\"$okFunction\" >$okText</button>";
+					echo "</div>";
+				echo "</div>";
+			echo "</div>";
+		echo "</div>";
+	}
 	
 	function drawOkModal($id, $title, $body, $cancelText){
 		drawModal($id, $title, $body, null, null, $cancelText);
@@ -160,7 +184,7 @@
 		drawModal($modalName, "\"".$name."\" Information", $body, null, null, "OK");
 	}
 	
-	function drawSettingsModal($name, $modalExportTarget, $okFunction, $dataSelect,
+	function drawSettingsModal($name, $modalExportTarget, $applyFunction, $okFunction, $dataSelect,
 								$dataTypeSelect, $yyMin, $yyMax, $avgSelect,
 								$dltSelect, $valuesSel, $values, $valuesBase64){
 					
@@ -250,31 +274,35 @@
 		else
 			$body .= "<option value='avgOff'>Hide Average line</option>";
 		
-		$body .= "</select><hr/><p><b>Delete data </b></p><select id='deleteSelect' style='width:100%;padding:14px;'>";
-		
-		if($dltSelect == "never")
-			$body .= "<option value='never' selected>Never delete the data</option>";
-		else
-			$body .= "<option value='never'>Never delete the data</option>";
-		if($dltSelect == "year")
-			$body .= "<option value='year' selected>(READ THE NOTE) Delete data with more than 1 year</option>";
-		else
-			$body .= "<option value='year'>(READ THE NOTE) Delete data with more than 1 year</option>";
-		if($dltSelect == "month")
-			$body .= "<option value='month' selected>(READ THE NOTE) Delete data with more than 1 month</option>";
-		else
-			$body .= "<option value='month'>(READ THE NOTE) Delete data with more than 1 month</option>";
-		if($dltSelect == "week")
-			$body .= "<option value='week' selected>(READ THE NOTE) Delete data with more than 1 week</option>";
-		else
-			$body .= "<option value='week'>(READ THE NOTE) Delete data with more than 1 week</option>";
-		
-		$body .= "</select><br/><br/><b style='color:red'>NOTE:</b> this is a permanent delete without recovery!";
-		$body .= "<hr/><p><b>Export Data</b></p>".
+		$body .= "</select><hr/>";
+
+		if($dltSelect != "none"){
+			$body .= "<p><b>Delete data </b></p><select id='deleteSelect' style='width:100%;padding:14px;'>";
+			
+			if($dltSelect == "never")
+				$body .= "<option value='never' selected>Never delete the data</option>";
+			else
+				$body .= "<option value='never'>Never delete the data</option>";
+			if($dltSelect == "year")
+				$body .= "<option value='year' selected>(READ THE NOTE) Delete data with more than 1 year</option>";
+			else
+				$body .= "<option value='year'>(READ THE NOTE) Delete data with more than 1 year</option>";
+			if($dltSelect == "month")
+				$body .= "<option value='month' selected>(READ THE NOTE) Delete data with more than 1 month</option>";
+			else
+				$body .= "<option value='month'>(READ THE NOTE) Delete data with more than 1 month</option>";
+			if($dltSelect == "week")
+				$body .= "<option value='week' selected>(READ THE NOTE) Delete data with more than 1 week</option>";
+			else
+				$body .= "<option value='week'>(READ THE NOTE) Delete data with more than 1 week</option>";
+			
+			$body .= "</select><br/><br/><b style='color:red'>NOTE:</b> this is a permanent delete without recovery!<hr/>";
+		}
+		$body .= "<p><b>Export Data</b></p>".
 				"<input type='button' data-dismiss=\"modal\" style='width:100%;height:47px;' value='Export' class='btn-export' data-toggle='modal' data-target='#$modalExportTarget' />".
 				"</div>";
 		
-		drawModal("modalSettings", "\"".$name."\" Settings", $body, $okFunction, "Save", "Cancel");
+		drawApplyModal("modalSettings", "\"".$name."\" Settings", $body, $applyFunction, "Apply", $okFunction, "Save", "Cancel");
 	}
 ?>
 
