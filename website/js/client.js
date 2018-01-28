@@ -329,7 +329,10 @@ function applyData(){
 			valuesSI += values[i] + ",";
 		valuesSI += values[values.length-1];
 	}
-	
+	if(document.getElementById("dataLong").value != dataSelectI){
+		document.getElementById("dataLong").value = dataSelectI;
+		getData();
+	}
 	updateChartSettings(dataSelectI, dataTypeSelectI, valuesSI, yyMinI, yyMaxI, avgSelectI);
 	$('#modalSettings').modal('toggle');
 }
