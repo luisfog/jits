@@ -22,10 +22,6 @@ function loop()
     
     -- Read DHT22
     if status == dht.OK then
-        local msg = string.format("{\"temp\" : \"%f\", \"hum\" : \"%f\"}",
-              temp,
-              humi
-        )
 
 		-- Create the attributes and values to sent
         local names = {'temp', 'hum'}
